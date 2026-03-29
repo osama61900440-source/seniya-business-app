@@ -1,31 +1,1051 @@
 <!DOCTYPE html>
 <html lang="am">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ሴኒያ የንግድ መመዝገቢያ</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ሴኒያ ቢዝነስ</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@300;400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#08080f;--card:#111118;--card2:#181825;
+  --gold:#d4a843;--gold2:#f0c84a;--gold3:#a07820;
+  --green:#22c55e;--red:#ef4444;--blue:#3b82f6;
+  --text:#f5f0e8;--muted:#6b6580;--border:#252535;
+}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans Ethiopic',sans-serif;min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#111;}::-webkit-scrollbar-thumb{background:var(--gold3);border-radius:2px;}
+.splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.8s;}
+.splash.hide{opacity:0;pointer-events:none;}
+.splash-arabic{font-size:42px;color:var(--gold2);margin-bottom:8px;font-weight:300;letter-spacing:4px;text-shadow:0 0 40px #d4a84388;}
+.splash-logo{font-size:64px;margin:16px 0;}
+.splash-title{font-size:28px;font-weight:800;color:var(--gold2);letter-spacing:1px;}
+.splash-sub{font-size:13px;color:var(--muted);margin-top:8px;}
+.splash-bar{width:180px;height:3px;background:var(--border);border-radius:2px;margin-top:32px;overflow:hidden;}
+.splash-fill{height:100%;background:linear-gradient(90deg,var(--gold3),var(--gold2));border-radius:2px;animation:fill 2s ease forwards;}
+@keyframes fill{from{width:0}to{width:100%}}
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative;}
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:14px 16px 12px;position:sticky;top:0;z-index:100;}
+.header-top{display:flex;align-items:center;gap:10px;}
+.logo-box{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold3));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.header-title{font-size:17px;font-weight:800;color:var(--gold2);}
+.header-arabic{font-size:11px;color:var(--muted);direction:rtl;}
+.header-right{margin-left:auto;text-align:right;}
+.header-role{font-size:10px;color:var(--muted);}
+.header-name{font-size:13px;font-weight:700;color:var(--gold);}
+.offline-badge{background:#7f1d1d;color:#fca5a5;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:8px;}
+.online-badge{background:#14532d;color:#86efac;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:8px;}
+.content{flex:1;padding:12px 12px 90px;overflow-y:auto;}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+.nav-btn{flex:1;background:none;border:none;cursor:pointer;padding:8px 0 6px;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);transition:color 0.2s;}
+.nav-btn.active{color:var(--gold);}
+.nav-icon{font-size:19px;}
+.nav-label{font-size:9px;font-weight:600;}
+.nav-dot{width:4px;height:4px;border-radius:2px;background:var(--gold);}
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;}
+.card+.card{margin-top:10px;}
+.card-title{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;}
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;}
+.stat-icon{font-size:22px;margin-bottom:6px;}
+.stat-val{font-size:17px;font-weight:800;}
+.stat-label{font-size:10px;color:var(--muted);margin-top:2px;}
+/* Inputs */
+.inp{width:100%;background:#0a0a12;border:1px solid var(--border);border-radius:10px;padding:11px 13px;color:var(--text);font-family:inherit;font-size:13px;outline:none;transition:border 0.2s;}
+.inp:focus{border-color:var(--gold);}
+.inp::placeholder{color:var(--muted);}
+.lbl{font-size:11px;color:var(--muted);margin-bottom:5px;display:block;}
+.field{margin-bottom:12px;}
+/* Buttons */
+.btn{width:100%;border:none;border-radius:12px;padding:13px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;transition:opacity 0.2s;}
+.btn:active{opacity:0.8;}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;}
+.btn-green{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;}
+.btn-red{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;}
+.btn-sm{padding:8px 14px;font-size:12px;width:auto;border-radius:8px;}
+/* Badges */
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;}
+.badge-red{background:#7f1d1d;color:#fca5a5;}
+.badge-green{background:#14532d;color:#86efac;}
+.badge-gold{background:#451a03;color:var(--gold2);}
+.badge-blue{background:#1e3a5f;color:#93c5fd;}
+/* List items */
+.list-item{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.list-item-img{width:48px;height:48px;border-radius:10px;background:#0a0a12;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.list-item-img img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin:8px 0;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#16a34a);border-radius:3px;transition:width 0.5s;}
+/* Alert */
+.alert{border-radius:13px;padding:13px 14px;margin-bottom:10px;}
+.alert-red{background:#3a0a0a;border:1px solid #ef444433;}
+.alert-gold{background:#2a1500;border:1px solid var(--gold3)44;}
+.alert-green{background:#0a2a14;border:1px solid #22c55e33;}
+/* Section heading */
+.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.sec-title{font-size:12px;color:var(--muted);font-weight:700;}
+/* Role screen */
+.role-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;z-index:500;}
+.role-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;width:100%;max-width:340px;cursor:pointer;transition:border-color 0.2s,transform 0.2s;margin-bottom:12px;}
+.role-card:active{transform:scale(0.98);}
+.role-card:hover{border-color:var(--gold);}
+.role-card-icon{font-size:40px;margin-bottom:12px;}
+.role-card-title{font-size:18px;font-weight:800;color:var(--gold2);margin-bottom:6px;}
+.role-card-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+/* Toast */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 22px;border-radius:22px;font-weight:700;z-index:9999;font-size:13px;box-shadow:0 4px 20px #0008;animation:toastIn 0.3s ease;}
+.toast.err{background:var(--red);}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+/* Chart */
+.chart-bar-wrap{display:flex;align-items:flex-end;gap:6px;height:100px;padding-top:8px;}
+.chart-bar{flex:1;border-radius:6px 6px 0 0;min-height:4px;transition:height 0.5s;}
+.chart-label{font-size:9px;color:var(--muted);text-align:center;margin-top:4px;}
+/* GPS dot */
+.gps-dot{width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;box-shadow:0 0 0 3px #22c55e33;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px #22c55e33}50%{box-shadow:0 0 0 6px #22c55e11}}
+select.inp{-webkit-appearance:none;}
+</style>
 </head>
-<body class="bg-gray-900 text-white">
-    <div id="root"></div>
-    <script type="text/babel">
-        // እዚህ ጋር በፎቶው ላይ ያየኸውን የReact ኮድ በሙሉ አስገባው
-        const App = () => {
-            return (
-                <div class="p-5 text-center">
-                    <h1 class="text-2xl text-orange-500 font-bold">ሴኒያ ቢዝነስ</h1>
-                    <p class="mt-4">የሸክላ እና የሰፌድ ሽያጭ መመዝገቢያ አፕሊኬሽን</p>
-                    <div class="mt-10 bg-gray-800 p-6 rounded-lg">
-                        <p>አፑን አሁን መጠቀም ትችላለህ!</p>
-                    </div>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback}=React;
+
+// ===== LOCAL STORAGE DB =====
+const DB={
+  get:(k)=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}},
+  set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}},
+  init(){
+    if(!this.get('sales'))this.set('sales',[]);
+    if(!this.get('products'))this.set('products',[
+      {id:1,name:'ሸክላ ድስት ትልቅ',price:180,cost:100,qty:20,category:'ሸክላ',image:null},
+      {id:2,name:'ሰፌድ አነስተኛ',price:45,cost:25,qty:35,category:'ሰፌድ',image:null},
+      {id:3,name:'ሸክላ ሳህን',price:60,cost:35,qty:18,category:'ሸክላ',image:null},
+    ]);
+    if(!this.get('debts'))this.set('debts',[]);
+    if(!this.get('expenses'))this.set('expenses',[]);
+    if(!this.get('damages'))this.set('damages',[]);
+    if(!this.get('preorders'))this.set('preorders',[]);
+    if(!this.get('customers'))this.set('customers',[]);
+    if(!this.get('transport'))this.set('transport',[]);
+    if(!this.get('returns'))this.set('returns',[]);
+    if(!this.get('workers'))this.set('workers',[
+      {id:1,name:'አለሙ ተሰማ',role:'worker'},
+      {id:2,name:'ሃና ምትኩ',role:'worker'},
+    ]);
+  }
+};
+DB.init();
+
+const fmt=(n)=>Number(n||0).toLocaleString('am-ET')+' ብር';
+const today=()=>new Date().toISOString().slice(0,10);
+const nowTime=()=>new Date().toLocaleTimeString('am',{hour:'2-digit',minute:'2-digit'});
+
+// ===== TOAST =====
+let _toast=null;
+function Toast({msg,type}){return msg?<div className={`toast${type==='err'?' err':''}`}>{msg}</div>:null;}
+
+// ===== SPLASH =====
+function Splash({onDone}){
+  const[hide,setHide]=useState(false);
+  useEffect(()=>{
+    const t=setTimeout(()=>{setHide(true);setTimeout(onDone,800);},2400);
+    return()=>clearTimeout(t);
+  },[]);
+  return(
+    <div className={`splash${hide?' hide':''}`}>
+      <div className="splash-arabic">إِنْ شَاءَ اللَّه</div>
+      <div style={{fontSize:11,color:'#6b6580',marginBottom:24,direction:'rtl'}}>مَا شَاءَ اللَّه</div>
+      <div className="splash-logo">🏺</div>
+      <div className="splash-title">ሴኒያ ቢዝነስ</div>
+      <div className="splash-sub">የሸቀጥ መደብር አስተዳዳሪ</div>
+      <div className="splash-bar"><div className="splash-fill"/></div>
+    </div>
+  );
+}
+
+// ===== ROLE SELECT =====
+function RoleSelect({onSelect}){
+  return(
+    <div className="role-screen">
+      <div style={{textAlign:'center',marginBottom:32}}>
+        <div style={{fontSize:40,marginBottom:8}}>🏺</div>
+        <div style={{fontSize:22,fontWeight:800,color:'var(--gold2)'}}>ሴኒያ ቢዝነስ</div>
+        <div style={{fontSize:12,color:'var(--muted)',marginTop:4}}>እርስዎ ማን ነዎት?</div>
+      </div>
+      <div className="role-card" onClick={()=>onSelect('owner')}>
+        <div className="role-card-icon">👑</div>
+        <div className="role-card-title">ባለቤት / አስተዳዳሪ</div>
+        <div className="role-card-desc">ሁሉንም ሪፖርቶች፣ ትርፍ፣ ሰራተኞችን እና ሙሉ ስርዓቱን ያያሉ</div>
+      </div>
+      <div className="role-card" onClick={()=>onSelect('worker')}>
+        <div className="role-card-icon">🧑‍💼</div>
+        <div className="role-card-title">ሰራተኛ</div>
+        <div className="role-card-desc">ሽያጭ ብቻ ይመዘግባሉ — ሌሎች ሂሳቦች አይታዩዎትም</div>
+      </div>
+    </div>
+  );
+}
+
+// ===== MAIN APP =====
+function App(){
+  const[splash,setSplash]=useState(true);
+  const[role,setRole]=useState(null);
+  const[tab,setTab]=useState('dashboard');
+  const[toast,setToast]=useState(null);
+  const[online,setOnline]=useState(navigator.onLine);
+  const[data,setData]=useState({
+    sales:DB.get('sales')||[],
+    products:DB.get('products')||[],
+    debts:DB.get('debts')||[],
+    expenses:DB.get('expenses')||[],
+    damages:DB.get('damages')||[],
+    preorders:DB.get('preorders')||[],
+    customers:DB.get('customers')||[],
+    transport:DB.get('transport')||[],
+    returns:DB.get('returns')||[],
+    workers:DB.get('workers')||[],
+  });
+
+  useEffect(()=>{
+    const on=()=>setOnline(true);
+    const off=()=>setOnline(false);
+    window.addEventListener('online',on);
+    window.addEventListener('offline',off);
+    return()=>{window.removeEventListener('online',on);window.removeEventListener('offline',off);};
+  },[]);
+
+  const save=(key,val)=>{
+    DB.set(key,val);
+    setData(d=>({...d,[key]:val}));
+  };
+
+  const showToast=(msg,type='ok')=>{
+    setToast({msg,type});
+    setTimeout(()=>setToast(null),2800);
+  };
+
+  if(splash)return<Splash onDone={()=>setSplash(false)}/>;
+  if(!role)return<RoleSelect onSelect={setRole}/>;
+
+  const ownerTabs=[
+    {id:'dashboard',icon:'📊',label:'ዳሽቦርድ'},
+    {id:'sale',icon:'💰',label:'ሽያጭ'},
+    {id:'inventory',icon:'📦',label:'ዕቃ'},
+    {id:'debts',icon:'📋',label:'ዱቤ'},
+    {id:'more',icon:'⚙️',label:'ተጨማሪ'},
+  ];
+  const workerTabs=[
+    {id:'sale',icon:'💰',label:'ሽያጭ'},
+    {id:'inventory',icon:'📦',label:'ዕቃ'},
+  ];
+  const tabs=role==='owner'?ownerTabs:workerTabs;
+  const activeTab=tabs.find(t=>t.id===tab)?tab:(tabs[0].id);
+
+  return(
+    <div className="app">
+      {toast&&<Toast msg={toast.msg} type={toast.type}/>}
+      {/* Header */}
+      <div className="header">
+        <div className="header-top">
+          <div className="logo-box">🏺</div>
+          <div>
+            <div className="header-title">ሴኒያ ቢዝነስ</div>
+            <div className="header-arabic">إِنْ شَاءَ اللَّه · مَا شَاءَ اللَّه</div>
+          </div>
+          <div className="header-right">
+            <div className="header-role">{role==='owner'?'👑 ባለቤት':'🧑‍💼 ሰራተኛ'}</div>
+            <span className={online?'online-badge':'offline-badge'}>{online?'● Online':'● Offline'}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="content">
+        {activeTab==='dashboard'&&role==='owner'&&<Dashboard data={data} save={save} showToast={showToast}/>}
+        {activeTab==='sale'&&<SalePage data={data} save={save} showToast={showToast} role={role}/>}
+        {activeTab==='inventory'&&<Inventory data={data} save={save} showToast={showToast} role={role}/>}
+        {activeTab==='debts'&&role==='owner'&&<Debts data={data} save={save} showToast={showToast}/>}
+        {activeTab==='more'&&role==='owner'&&<More data={data} save={save} showToast={showToast}/>}
+      </div>
+
+      {/* Bottom Nav */}
+      <div className="bottom-nav">
+        {tabs.map(t=>(
+          <button key={t.id} className={`nav-btn${activeTab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>
+            <span className="nav-icon">{t.icon}</span>
+            <span className="nav-label">{t.label}</span>
+            {activeTab===t.id&&<div className="nav-dot"/>}
+          </button>
+        ))}
+        <button className="nav-btn" onClick={()=>setRole(null)}>
+          <span className="nav-icon">🔄</span>
+          <span className="nav-label">ቀይር</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ===== DASHBOARD =====
+function Dashboard({data,save,showToast}){
+  const todaySales=data.sales.filter(s=>s.date===today()&&s.method!=='ዱቤ').reduce((s,x)=>s+x.total,0);
+  const todayDebt=data.sales.filter(s=>s.date===today()&&s.method==='ዱቤ').reduce((s,x)=>s+x.total,0);
+  const totalExpenses=data.expenses.filter(e=>e.date===today()).reduce((s,x)=>s+x.amount,0);
+  const totalDamages=data.damages.reduce((s,x)=>s+(x.qty*(x.cost||0)),0);
+  const outstanding=data.debts.reduce((s,d)=>s+(d.total-d.paid),0);
+  const lowStock=data.products.filter(p=>p.qty<=5);
+  const todayProfit=data.sales.filter(s=>s.date===today()).reduce((s,x)=>s+(x.total-(x.cost||0)*x.qty),0)-totalExpenses;
+
+  // Weekly chart
+  const days=['ሰ','ሰ','ሶ','ሐ','አ','ዓ','ቅ'];
+  const weekSales=Array(7).fill(0).map((_,i)=>{
+    const d=new Date();d.setDate(d.getDate()-6+i);
+    const dk=d.toISOString().slice(0,10);
+    return data.sales.filter(s=>s.date===dk&&s.method!=='ዱቤ').reduce((s,x)=>s+x.total,0);
+  });
+  const maxW=Math.max(...weekSales,1);
+
+  return(
+    <div>
+      {/* Arabic greeting */}
+      <div style={{textAlign:'center',padding:'8px 0 14px',borderBottom:'1px solid var(--border)',marginBottom:14}}>
+        <div style={{fontSize:22,color:'var(--gold2)',direction:'rtl',letterSpacing:3}}>بِسْمِ اللَّه الرَّحْمَنِ الرَّحِيم</div>
+        <div style={{fontSize:11,color:'var(--muted)',marginTop:4}}>ዛሬ · {new Date().toLocaleDateString('am')}</div>
+      </div>
+
+      {/* Stats */}
+      <div className="stats-grid">
+        {[
+          {icon:'💵',val:fmt(todaySales),label:'ዛሬ ሽያጭ',color:'var(--green)'},
+          {icon:'📈',val:fmt(todayProfit),label:'ዛሬ ትርፍ',color:'var(--gold2)'},
+          {icon:'💸',val:fmt(outstanding),label:'ያልተሰበሰበ',color:'var(--red)'},
+          {icon:'📦',val:data.products.reduce((s,p)=>s+p.qty,0)+' ፍሬ',label:'ዕቃ ክምችት',color:'var(--blue)'},
+        ].map((s,i)=>(
+          <div key={i} className="stat-card">
+            <div className="stat-icon">{s.icon}</div>
+            <div className="stat-val" style={{color:s.color}}>{s.val}</div>
+            <div className="stat-label">{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Weekly chart */}
+      <div className="card" style={{marginBottom:10}}>
+        <div className="card-title">📊 የሳምንቱ ሽያጭ</div>
+        <div className="chart-bar-wrap">
+          {weekSales.map((v,i)=>(
+            <div key={i} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center'}}>
+              <div className="chart-bar" style={{width:'100%',height:(v/maxW)*90+'px',background:i===6?'linear-gradient(var(--gold2),var(--gold3))':'linear-gradient(#3b82f6,#1d4ed8)'}}/>
+              <div className="chart-label">{days[i]}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Low stock alert */}
+      {lowStock.length>0&&(
+        <div className="alert alert-gold" style={{marginBottom:10}}>
+          <div style={{fontSize:13,fontWeight:700,color:'var(--gold2)',marginBottom:6}}>⚠️ ዕቃ እያለቀ ነው ({lowStock.length})</div>
+          {lowStock.map(p=><div key={p.id} style={{fontSize:12,color:'#fbbf24'}}>• {p.name} — {p.qty} ፍሬ</div>)}
+        </div>
+      )}
+
+      {/* Pending preorders */}
+      {data.preorders.filter(p=>!p.fulfilled).length>0&&(
+        <div className="alert alert-blue" style={{marginBottom:10,background:'#0c1a2e',border:'1px solid #3b82f633'}}>
+          <div style={{fontSize:13,fontWeight:700,color:'#93c5fd',marginBottom:6}}>🔖 ቅድመ ትዕዛዞች ({data.preorders.filter(p=>!p.fulfilled).length})</div>
+          {data.preorders.filter(p=>!p.fulfilled).slice(0,3).map(p=><div key={p.id} style={{fontSize:12,color:'#bfdbfe'}}>• {p.customerName} — {p.item} ({fmt(p.deposit)} ቀድሞ)</div>)}
+        </div>
+      )}
+
+      {/* Overdue debts */}
+      {data.debts.filter(d=>(d.total-d.paid)>0&&d.dueDate<today()).length>0&&(
+        <div className="alert alert-red" style={{marginBottom:10}}>
+          <div style={{fontSize:13,fontWeight:700,color:'#fca5a5',marginBottom:6}}>⏰ ቀን ያለፈ ዱቤዎች</div>
+          {data.debts.filter(d=>(d.total-d.paid)>0&&d.dueDate<today()).map(d=><div key={d.id} style={{fontSize:12,color:'#fca5a5'}}>• {d.name} — {fmt(d.total-d.paid)}</div>)}
+        </div>
+      )}
+
+      {/* Summary row */}
+      <div className="card">
+        <div className="card-title">ዛሬ ማጠቃለያ</div>
+        {[
+          ['ዛሬ ጠቅላላ ሽያጭ',fmt(todaySales+todayDebt),'var(--text)'],
+          ['ወጪ',fmt(totalExpenses),'var(--red)'],
+          ['ዱቤ ሽያጭ',fmt(todayDebt),'var(--blue)'],
+          ['ሰበራ / ኪሳራ',fmt(totalDamages),'var(--red)'],
+          ['ተጣራ ትርፍ',fmt(Math.max(0,todayProfit)),'var(--green)'],
+        ].map(([l,v,c],i)=>(
+          <div key={i} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
+            <span style={{fontSize:13,color:'var(--muted)'}}>{l}</span>
+            <span style={{fontSize:13,fontWeight:700,color:c}}>{v}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ===== SALE PAGE =====
+function SalePage({data,save,showToast,role}){
+  const[selProduct,setSelProduct]=useState(null);
+  const[qty,setQty]=useState(1);
+  const[method,setMethod]=useState('ካሽ');
+  const[discount,setDiscount]=useState(0);
+  const[debtName,setDebtName]=useState('');
+  const[debtPhone,setDebtPhone]=useState('');
+  const[dueDate,setDueDate]=useState('');
+  const[worker,setWorker]=useState('ባለቤት');
+  const[gps,setGps]=useState(null);
+  const[voiceMemo,setVoiceMemo]=useState('');
+  const[receipt,setReceipt]=useState(null);
+
+  const prod=data.products.find(p=>p.id===selProduct);
+  const baseTotal=prod?(prod.price*qty):0;
+  const discountAmt=discount>0?Math.round(baseTotal*(discount/100)):0;
+  const total=baseTotal-discountAmt;
+
+  const getGps=()=>{
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(pos=>{
+        setGps({lat:pos.coords.latitude.toFixed(4),lng:pos.coords.longitude.toFixed(4)});
+        showToast('📍 አካባቢ ተቀዷል!');
+      },()=>showToast('GPS አልተሰራም','err'));
+    }
+  };
+
+  const recordSale=()=>{
+    if(!prod){showToast('ዕቃ ምረጥ!','err');return;}
+    if(qty>prod.qty){showToast('ዕቃ በቂ አይደለም!','err');return;}
+    if(method==='ዱቤ'&&!debtName){showToast('ደንበኛ ስም ፃፍ!','err');return;}
+
+    const sale={
+      id:Date.now(),
+      product:prod.name,productId:prod.id,
+      qty,total,cost:prod.cost,
+      method,discount,discountAmt,
+      date:today(),time:nowTime(),
+      worker,gps,voiceMemo,
+    };
+
+    const newSales=[...data.sales,sale];
+    const newProds=data.products.map(p=>p.id===prod.id?{...p,qty:p.qty-qty}:p);
+    save('sales',newSales);
+    save('products',newProds);
+
+    if(method==='ዱቤ'){
+      const debt={id:Date.now()+1,name:debtName,phone:debtPhone,item:prod.name,qty,total,paid:0,dueDate,date:today()};
+      save('debts',[...data.debts,debt]);
+    }
+
+    // Show receipt
+    setReceipt({product:prod.name,qty,total,discountAmt,method,date:today(),time:nowTime(),worker});
+    setSelProduct(null);setQty(1);setDiscount(0);setDebtName('');setDebtPhone('');setDueDate('');setVoiceMemo('');setGps(null);
+    showToast('ሽያጭ ተመዝግቧል ✓  '+fmt(total));
+  };
+
+  if(receipt){
+    return(
+      <div>
+        <div className="card" style={{textAlign:'center',border:'1px solid var(--gold3)'}}>
+          <div style={{fontSize:32,marginBottom:8}}>🧾</div>
+          <div style={{fontSize:20,fontWeight:800,color:'var(--gold2)',marginBottom:4}}>ደረሰኝ</div>
+          <div style={{fontSize:11,color:'var(--muted)',marginBottom:16}}>ሴኒያ ቢዝነስ · {receipt.date} {receipt.time}</div>
+          <div style={{textAlign:'left'}}>
+            {[['ዕቃ',receipt.product],['ብዛት',receipt.qty+' ፍሬ'],['ቅናሽ',receipt.discountAmt>0?fmt(receipt.discountAmt):'—'],['ጠቅላላ',fmt(receipt.total)],['ክፍያ',receipt.method],['ሰራተኛ',receipt.worker]].map(([l,v],i)=>(
+              <div key={i} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
+                <span style={{color:'var(--muted)',fontSize:13}}>{l}</span>
+                <span style={{fontWeight:700,fontSize:13}}>{v}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{marginTop:16,padding:12,background:'#0a0a12',borderRadius:10,fontSize:11,color:'var(--muted)',direction:'rtl'}}>شُكْرًا لَكَ — አመሰግናለሁ</div>
+        </div>
+        <button className="btn btn-gold" style={{marginTop:12}} onClick={()=>setReceipt(null)}>+ አዲስ ሽያጭ</button>
+      </div>
+    );
+  }
+
+  return(
+    <div>
+      <div className="sec-head"><div className="sec-title">💰 ሽያጭ ምዝገባ</div></div>
+
+      <div className="card">
+        {/* Product */}
+        <div className="field">
+          <label className="lbl">ዕቃ ምረጥ</label>
+          <select className="inp" value={selProduct||''} onChange={e=>setSelProduct(Number(e.target.value))}>
+            <option value="">— ዕቃ ምረጥ —</option>
+            {data.products.map(p=><option key={p.id} value={p.id}>{p.name} ({p.qty} ፍሬ) — {fmt(p.price)}</option>)}
+          </select>
+        </div>
+
+        {/* Qty */}
+        <div className="field">
+          <label className="lbl">ብዛት</label>
+          <div style={{display:'flex',alignItems:'center',gap:12}}>
+            <button style={{width:36,height:36,borderRadius:10,background:'var(--card2)',border:'1px solid var(--border)',color:'var(--text)',fontSize:20,cursor:'pointer'}} onClick={()=>setQty(q=>Math.max(1,q-1))}>−</button>
+            <span style={{fontSize:20,fontWeight:800,minWidth:30,textAlign:'center'}}>{qty}</span>
+            <button style={{width:36,height:36,borderRadius:10,background:'var(--card2)',border:'1px solid var(--border)',color:'var(--text)',fontSize:20,cursor:'pointer'}} onClick={()=>setQty(q=>prod?Math.min(prod.qty,q+1):q+1)}>+</button>
+          </div>
+        </div>
+
+        {/* Discount */}
+        <div className="field">
+          <label className="lbl">ቅናሽ % (ካለ)</label>
+          <input className="inp" type="number" placeholder="0" min="0" max="100" value={discount} onChange={e=>setDiscount(Number(e.target.value))}/>
+        </div>
+
+        {/* Total */}
+        <div style={{background:'#0a0a12',borderRadius:12,padding:'12px 16px',marginBottom:14,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+          <div>
+            <div style={{fontSize:11,color:'var(--muted)'}}>ጠቅላላ</div>
+            {discountAmt>0&&<div style={{fontSize:11,color:'var(--red)',textDecoration:'line-through'}}>{fmt(baseTotal)}</div>}
+          </div>
+          <div style={{fontSize:22,fontWeight:800,color:'var(--gold2)'}}>{fmt(total)}</div>
+        </div>
+
+        {/* Payment */}
+        <div className="field">
+          <label className="lbl">የክፍያ ዓይነት</label>
+          <div style={{display:'flex',gap:8}}>
+            {['ካሽ','ባንክ','ዱቤ'].map(m=>(
+              <button key={m} onClick={()=>setMethod(m)} style={{flex:1,padding:'10px 0',borderRadius:10,border:`1.5px solid ${method===m?(m==='ዱቤ'?'var(--red)':'var(--gold)'):'var(--border)'}`,background:method===m?(m==='ዱቤ'?'#3a0a0a':'#2a1500'):'var(--card2)',color:method===m?(m==='ዱቤ'?'#fca5a5':'var(--gold2)'):'var(--muted)',fontFamily:'inherit',fontSize:13,fontWeight:700,cursor:'pointer'}}>
+                {m==='ካሽ'?'💵 ካሽ':m==='ባንክ'?'🏦 ባንክ':'📋 ዱቤ'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Debt fields */}
+        {method==='ዱቤ'&&(
+          <div style={{background:'#1a0808',border:'1px solid var(--red)33',borderRadius:12,padding:12,marginBottom:14}}>
+            <div style={{fontSize:12,fontWeight:700,color:'var(--red)',marginBottom:10}}>📋 የዱቤ ዝርዝር</div>
+            <div className="field"><label className="lbl">ደንበኛ ስም</label><input className="inp" placeholder="ስም" value={debtName} onChange={e=>setDebtName(e.target.value)}/></div>
+            <div className="field"><label className="lbl">ስልክ</label><input className="inp" type="tel" placeholder="09..." value={debtPhone} onChange={e=>setDebtPhone(e.target.value)}/></div>
+            <div className="field"><label className="lbl">የቀጠሮ ቀን</label><input className="inp" type="date" value={dueDate} onChange={e=>setDueDate(e.target.value)}/></div>
+          </div>
+        )}
+
+        {/* Worker */}
+        <div className="field">
+          <label className="lbl">ሰራተኛ</label>
+          <select className="inp" value={worker} onChange={e=>setWorker(e.target.value)}>
+            <option>ባለቤት</option>
+            {data.workers.map(w=><option key={w.id}>{w.name}</option>)}
+          </select>
+        </div>
+
+        {/* GPS */}
+        <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+          <button onClick={getGps} style={{background:'var(--card2)',border:'1px solid var(--border)',borderRadius:10,padding:'8px 14px',color:gps?'var(--green)':'var(--muted)',fontSize:12,cursor:'pointer',fontFamily:'inherit'}}>
+            {gps?<><span className="gps-dot"/>አካባቢ ቀዷል</>:'📍 GPS ቅዳ'}
+          </button>
+          {gps&&<span style={{fontSize:11,color:'var(--muted)'}}>{gps.lat}, {gps.lng}</span>}
+        </div>
+
+        {/* Voice memo */}
+        <div className="field">
+          <label className="lbl">🎙 ማስታወሻ (ድምፅ / ፅሁፍ)</label>
+          <input className="inp" placeholder="ዝርዝር ጻፍ ወይም ቀረጽ..." value={voiceMemo} onChange={e=>setVoiceMemo(e.target.value)}/>
+        </div>
+
+        <button className="btn btn-gold" onClick={recordSale}>ሽያጭ ምዝገባ ✓</button>
+      </div>
+
+      {/* Recent sales */}
+      <div style={{marginTop:14}}>
+        <div className="sec-head"><div className="sec-title">የቅርብ ሽያጮች</div></div>
+        {data.sales.slice(-5).reverse().map(s=>(
+          <div key={s.id} className="list-item">
+            <div className="list-item-img">📦</div>
+            <div style={{flex:1}}>
+              <div style={{fontWeight:600,fontSize:13}}>{s.product}</div>
+              <div style={{fontSize:11,color:'var(--muted)'}}>{s.qty} ፍሬ · {s.method} · {s.worker} · {s.time}</div>
+              {s.gps&&<div style={{fontSize:10,color:'var(--green)'}}>📍 {s.gps.lat},{s.gps.lng}</div>}
+            </div>
+            <div style={{fontWeight:700,color:s.method==='ዱቤ'?'var(--red)':s.method==='ባንክ'?'var(--blue)':'var(--green)',fontSize:13}}>{fmt(s.total)}</div>
+          </div>
+        ))}
+        {data.sales.length===0&&<div style={{textAlign:'center',color:'var(--muted)',padding:30,fontSize:13}}>ሽያጭ አልተመዘገበም</div>}
+      </div>
+    </div>
+  );
+}
+
+// ===== INVENTORY =====
+function Inventory({data,save,showToast,role}){
+  const[search,setSearch]=useState('');
+  const[showAdd,setShowAdd]=useState(false);
+  const[form,setForm]=useState({name:'',price:'',cost:'',qty:'',category:'ሸክላ',image:null});
+  const fileRef=useRef();
+
+  const filtered=data.products.filter(p=>p.name.includes(search)||p.category.includes(search));
+
+  const handleImg=(e)=>{
+    const f=e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>setForm(prev=>({...prev,image:r.result}));
+    r.readAsDataURL(f);
+  };
+
+  const addProduct=()=>{
+    if(!form.name||!form.price||!form.qty){showToast('ሁሉ ሙሉ!','err');return;}
+    const p={id:Date.now(),...form,price:parseFloat(form.price),cost:parseFloat(form.cost||0),qty:parseInt(form.qty)};
+    save('products',[...data.products,p]);
+    setForm({name:'',price:'',cost:'',qty:'',category:'ሸክላ',image:null});
+    setShowAdd(false);
+    showToast('ዕቃ ተመዝግቧል ✓');
+  };
+
+  const deleteProduct=(id)=>{
+    save('products',data.products.filter(p=>p.id!==id));
+    showToast('ዕቃ ተሰርዟል');
+  };
+
+  return(
+    <div>
+      <div className="sec-head">
+        <div className="sec-title">📦 ዕቃዎች ({data.products.length})</div>
+        {role==='owner'&&<button className="btn btn-gold btn-sm" onClick={()=>setShowAdd(!showAdd)}>{showAdd?'✕ ዝጋ':'+ አዲስ'}</button>}
+      </div>
+
+      <input className="inp" style={{marginBottom:12}} placeholder="ዕቃ ፈልግ..." value={search} onChange={e=>setSearch(e.target.value)}/>
+
+      {showAdd&&(
+        <div className="card" style={{marginBottom:12,border:'1px solid var(--gold3)44'}}>
+          <div style={{fontSize:13,fontWeight:700,color:'var(--gold2)',marginBottom:12}}>አዲስ ዕቃ</div>
+          <div onClick={()=>fileRef.current.click()} style={{height:90,background:'#0a0a12',border:'2px dashed var(--border)',borderRadius:12,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',marginBottom:12,overflow:'hidden'}}>
+            {form.image?<img src={form.image} style={{width:'100%',height:'100%',objectFit:'cover'}}/>:<div style={{textAlign:'center',color:'var(--muted)'}}><div style={{fontSize:28}}>📷</div><div style={{fontSize:11}}>ፎቶ ጨምር</div></div>}
+          </div>
+          <input ref={fileRef} type="file" accept="image/*" capture="environment" style={{display:'none'}} onChange={handleImg}/>
+          {[['ስም','name','text','ሸክላ ድስት'],['ዋጋ (ብር)','price','number','200'],['መግዣ ዋጋ','cost','number','120'],['ብዛት','qty','number','10']].map(([l,k,t,ph])=>(
+            <div className="field" key={k}><label className="lbl">{l}</label><input className="inp" type={t} placeholder={ph} value={form[k]} onChange={e=>setForm(f=>({...f,[k]:e.target.value}))}/></div>
+          ))}
+          <div className="field">
+            <label className="lbl">ዓይነት</label>
+            <select className="inp" value={form.category} onChange={e=>setForm(f=>({...f,category:e.target.value}))}>
+              {['ሸክላ','ሰፌድ','ሌላ'].map(c=><option key={c}>{c}</option>)}
+            </select>
+          </div>
+          <button className="btn btn-gold" onClick={addProduct}>ምዝገባ ✓</button>
+        </div>
+      )}
+
+      {filtered.map(p=>(
+        <div key={p.id} className="list-item" style={{border:`1px solid ${p.qty<=5?'var(--gold3)44':'var(--border)'}`}}>
+          <div className="list-item-img">{p.image?<img src={p.image}/>:'📦'}</div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:700,fontSize:13}}>{p.name}</div>
+            <div style={{fontSize:11,color:'var(--muted)'}}>{p.category}</div>
+            <div style={{display:'flex',gap:10,marginTop:4}}>
+              <span style={{fontSize:12,fontWeight:700,color:'var(--green)'}}>{fmt(p.price)}</span>
+              {role==='owner'&&<span style={{fontSize:11,color:'var(--muted)'}}>ዋጋ:{fmt(p.cost)}</span>}
+              <span style={{fontSize:12,color:p.qty<=5?'var(--gold)':'var(--muted)',fontWeight:p.qty<=5?700:400}}>{p.qty}ፍሬ {p.qty<=5?'⚠️':''}</span>
+            </div>
+            {role==='owner'&&<div style={{fontSize:11,color:'var(--blue)',marginTop:2}}>ትርፍ ልዩነት: {fmt(p.price-p.cost)} ({Math.round(((p.price-p.cost)/p.price)*100)}%)</div>}
+          </div>
+          {role==='owner'&&<button onClick={()=>deleteProduct(p.id)} style={{background:'#3a0a0a',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',color:'var(--red)',fontSize:14}}>🗑</button>}
+        </div>
+      ))}
+
+      {filtered.length===0&&<div style={{textAlign:'center',color:'var(--muted)',padding:40,fontSize:13}}>ዕቃ አልተገኘም</div>}
+    </div>
+  );
+}
+
+// ===== DEBTS =====
+function Debts({data,save,showToast}){
+  const[payId,setPayId]=useState(null);
+  const[payAmt,setPayAmt]=useState('');
+
+  const pay=()=>{
+    const amt=parseFloat(payAmt);
+    if(!amt||amt<=0){showToast('ብር ፃፍ!','err');return;}
+    const debt=data.debts.find(d=>d.id===payId);
+    if(!debt)return;
+    const rem=debt.total-debt.paid;
+    if(amt>rem){showToast('ከዕዳ በላይ!','err');return;}
+    const updated=data.debts.map(d=>d.id===payId?{...d,paid:d.paid+amt}:d).filter(d=>d.total-d.paid>0.01);
+    save('debts',updated);
+    setPayId(null);setPayAmt('');
+    showToast(fmt(amt)+' ተሰብስቧል ✓');
+  };
+
+  const activeDebts=data.debts.filter(d=>(d.total-d.paid)>0);
+  const total=activeDebts.reduce((s,d)=>s+(d.total-d.paid),0);
+
+  return(
+    <div>
+      <div style={{background:'#1a0808',border:'1px solid var(--red)33',borderRadius:13,padding:14,marginBottom:12,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+        <span style={{fontSize:13,color:'var(--muted)'}}>ጠቅላላ ዕዳ</span>
+        <span style={{fontSize:18,fontWeight:800,color:'var(--red)'}}>{fmt(total)}</span>
+      </div>
+
+      {activeDebts.length===0&&<div style={{textAlign:'center',color:'var(--muted)',padding:60}}><div style={{fontSize:48,marginBottom:12}}>🎉</div><div>ዱቤ የለም!</div></div>}
+
+      {activeDebts.map(d=>{
+        const rem=d.total-d.paid;
+        const pct=(d.paid/d.total)*100;
+        const overdue=d.dueDate&&d.dueDate<today();
+        return(
+          <div key={d.id} className="card" style={{marginBottom:10,border:`1px solid ${overdue?'var(--red)44':'var(--border)'}`}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
+              <div>
+                <div style={{fontWeight:700,fontSize:14,display:'flex',alignItems:'center',gap:6}}>
+                  {d.name}
+                  {overdue&&<span className="badge badge-red">ዘግይቷል</span>}
                 </div>
-            );
-        };
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+                <div style={{fontSize:11,color:'var(--muted)'}}>{d.phone} · {d.item} x{d.qty}</div>
+                {d.dueDate&&<div style={{fontSize:11,color:'var(--muted)'}}>ቀጠሮ: {d.dueDate}</div>}
+              </div>
+              <div style={{fontWeight:800,color:'var(--gold2)',fontSize:14}}>{fmt(d.total)}</div>
+            </div>
+            <div className="progress-bar"><div className="progress-fill" style={{width:pct+'%'}}/></div>
+            <div style={{display:'flex',justifyContent:'space-between',marginBottom:12}}>
+              <span style={{fontSize:12,fontWeight:700,color:'var(--green)'}}>የተሰበሰበ: {fmt(d.paid)}</span>
+              <span style={{fontSize:12,fontWeight:700,color:'var(--red)'}}>ቀሪ: {fmt(rem)}</span>
+            </div>
+            <button className="btn btn-green btn-sm" style={{width:'100%'}} onClick={()=>{setPayId(d.id);setPayAmt('');}}>💵 ክፍያ ተቀበል</button>
+          </div>
+        );
+      })}
+
+      {payId&&(
+        <div style={{position:'fixed',inset:0,background:'#000a',zIndex:500,display:'flex',alignItems:'flex-end'}}>
+          <div style={{background:'var(--card)',width:'100%',maxWidth:480,margin:'0 auto',borderRadius:'20px 20px 0 0',padding:24}}>
+            <div style={{fontWeight:700,fontSize:16,marginBottom:4}}>💵 ክፍያ ተቀበል</div>
+            <div style={{fontSize:12,color:'var(--muted)',marginBottom:16}}>ቀሪ: {fmt(data.debts.find(d=>d.id===payId)?.total-data.debts.find(d=>d.id===payId)?.paid||0)}</div>
+            <input className="inp" type="number" placeholder="ብር..." value={payAmt} onChange={e=>setPayAmt(e.target.value)} style={{fontSize:18,fontWeight:700,marginBottom:16}} autoFocus/>
+            <div style={{display:'flex',gap:10}}>
+              <button onClick={()=>setPayId(null)} style={{flex:1,padding:12,background:'var(--card2)',border:'1px solid var(--border)',borderRadius:12,color:'var(--muted)',cursor:'pointer',fontFamily:'inherit'}}>ይቅር</button>
+              <button onClick={pay} className="btn btn-green" style={{flex:2}}>ተቀበልኩ ✓</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ===== MORE (Owner only) =====
+function More({data,save,showToast}){
+  const[subTab,setSubTab]=useState('expenses');
+
+  const subTabs=[
+    {id:'expenses',label:'💸 ወጪ'},
+    {id:'damages',label:'🏺 ሰበራ'},
+    {id:'transport',label:'🚚 ትራንስፖርት'},
+    {id:'preorders',label:'🔖 ቅድሚያ'},
+    {id:'returns',label:'↩️ መልስ'},
+    {id:'customers',label:'👥 ደንበኞች'},
+    {id:'report',label:'📈 ሪፖርት'},
+    {id:'workers',label:'🧑‍💼 ሰራተኞች'},
+  ];
+
+  return(
+    <div>
+      <div style={{display:'flex',gap:6,overflowX:'auto',paddingBottom:8,marginBottom:12}}>
+        {subTabs.map(t=>(
+          <button key={t.id} onClick={()=>setSubTab(t.id)} style={{flexShrink:0,padding:'7px 12px',borderRadius:20,border:`1.5px solid ${subTab===t.id?'var(--gold)':'var(--border)'}`,background:subTab===t.id?'#2a1500':'var(--card)',color:subTab===t.id?'var(--gold2)':'var(--muted)',fontFamily:'inherit',fontSize:12,cursor:'pointer',fontWeight:subTab===t.id?700:400}}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {subTab==='expenses'&&<ExpensesTab data={data} save={save} showToast={showToast}/>}
+      {subTab==='damages'&&<DamagesTab data={data} save={save} showToast={showToast}/>}
+      {subTab==='transport'&&<TransportTab data={data} save={save} showToast={showToast}/>}
+      {subTab==='preorders'&&<PreordersTab data={data} save={save} showToast={showToast}/>}
+      {subTab==='returns'&&<ReturnsTab data={data} save={save} showToast={showToast}/>}
+      {subTab==='customers'&&<CustomersTab data={data} save={save} showToast={showToast}/>}
+      {subTab==='report'&&<ReportTab data={data}/>}
+      {subTab==='workers'&&<WorkersTab data={data} save={save} showToast={showToast}/>}
+    </div>
+  );
+}
+
+function ExpensesTab({data,save,showToast}){
+  const[form,setForm]=useState({desc:'',amount:'',category:'ምግብ'});
+  const cats=['ምግብ','ሻይ ቡና','ትምህርት','ትራንስፖርት','ሌላ'];
+  const add=()=>{
+    if(!form.desc||!form.amount){showToast('ሁሉ ሙሉ!','err');return;}
+    const e={id:Date.now(),...form,amount:parseFloat(form.amount),date:today()};
+    save('expenses',[...data.expenses,e]);
+    setForm({desc:'',amount:'',category:'ምግብ'});
+    showToast('ወጪ ተመዝግቧል ✓');
+  };
+  const todayTotal=data.expenses.filter(e=>e.date===today()).reduce((s,x)=>s+x.amount,0);
+  return(
+    <div>
+      <div className="card" style={{marginBottom:12}}>
+        <div className="field"><label className="lbl">ዝርዝር</label><input className="inp" placeholder="ምን ወጪ?" value={form.desc} onChange={e=>setForm(f=>({...f,desc:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ብር</label><input className="inp" type="number" placeholder="ወጪ ብር" value={form.amount} onChange={e=>setForm(f=>({...f,amount:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ዓይነት</label><select className="inp" value={form.category} onChange={e=>setForm(f=>({...f,category:e.target.value}))}>{cats.map(c=><option key={c}>{c}</option>)}</select></div>
+        <button className="btn btn-gold" onClick={add}>+ ወጪ ምዝገባ</button>
+      </div>
+      <div style={{display:'flex',justifyContent:'space-between',marginBottom:10,padding:'0 4px'}}>
+        <span style={{fontSize:13,color:'var(--muted)'}}>ዛሬ ጠቅላላ ወጪ</span>
+        <span style={{fontWeight:700,color:'var(--red)'}}>{fmt(todayTotal)}</span>
+      </div>
+      {data.expenses.slice(-10).reverse().map(e=>(
+        <div key={e.id} className="list-item">
+          <div className="list-item-img" style={{fontSize:16}}>💸</div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{e.desc}</div><div style={{fontSize:11,color:'var(--muted)'}}>{e.category} · {e.date}</div></div>
+          <div style={{fontWeight:700,color:'var(--red)',fontSize:13}}>{fmt(e.amount)}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function DamagesTab({data,save,showToast}){
+  const[form,setForm]=useState({item:'',qty:'',reason:'ጭነት ላይ ተሰበረ',cost:''});
+  const add=()=>{
+    if(!form.item||!form.qty){showToast('ሙሉ!','err');return;}
+    save('damages',[...data.damages,{id:Date.now(),...form,qty:parseInt(form.qty),cost:parseFloat(form.cost||0),date:today()}]);
+    setForm({item:'',qty:'',reason:'ጭነት ላይ ተሰበረ',cost:''});
+    showToast('ሰበራ ተመዝግቧል');
+  };
+  return(
+    <div>
+      <div className="card" style={{marginBottom:12,border:'1px solid var(--red)33'}}>
+        <div style={{fontSize:13,fontWeight:700,color:'var(--red)',marginBottom:10}}>🏺 ሰበራ / ብልሽት ምዝገባ</div>
+        <div className="field"><label className="lbl">ዕቃ ስም</label><input className="inp" placeholder="ሸክላ ድስት..." value={form.item} onChange={e=>setForm(f=>({...f,item:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ብዛት (ፍሬ)</label><input className="inp" type="number" placeholder="ብዛት" value={form.qty} onChange={e=>setForm(f=>({...f,qty:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">የዕቃ ዋጋ (ብር)</label><input className="inp" type="number" placeholder="ዋጋ" value={form.cost} onChange={e=>setForm(f=>({...f,cost:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ምክንያት</label><select className="inp" value={form.reason} onChange={e=>setForm(f=>({...f,reason:e.target.value}))}>{['ጭነት ላይ ተሰበረ','ሽያጭ ወቅት','ሌሎች'].map(r=><option key={r}>{r}</option>)}</select></div>
+        <button className="btn btn-red" onClick={add}>ሰበራ ምዝገባ</button>
+      </div>
+      {data.damages.slice(-8).reverse().map(d=>(
+        <div key={d.id} className="list-item">
+          <div className="list-item-img">💔</div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{d.item} x{d.qty}</div><div style={{fontSize:11,color:'var(--muted)'}}>{d.reason} · {d.date}</div></div>
+          <div style={{fontWeight:700,color:'var(--red)',fontSize:12}}>{fmt(d.cost*d.qty)}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TransportTab({data,save,showToast}){
+  const[form,setForm]=useState({from:'ወልቂጤ',to:'ቡሌ ሆራ',vehicle:'ኢሱዙ',cost:'',date:today(),items:''});
+  const add=()=>{
+    if(!form.cost){showToast('ወጪ ፃፍ!','err');return;}
+    save('transport',[...data.transport,{id:Date.now(),...form,cost:parseFloat(form.cost)}]);
+    setForm({from:'ወልቂጤ',to:'ቡሌ ሆራ',vehicle:'ኢሱዙ',cost:'',date:today(),items:''});
+    showToast('ትራንስፖርት ተመዝግቧል ✓');
+  };
+  return(
+    <div>
+      <div className="card" style={{marginBottom:12}}>
+        <div className="field"><label className="lbl">ከ</label><input className="inp" value={form.from} onChange={e=>setForm(f=>({...f,from:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ወደ</label><input className="inp" value={form.to} onChange={e=>setForm(f=>({...f,to:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">መኪና</label><select className="inp" value={form.vehicle} onChange={e=>setForm(f=>({...f,vehicle:e.target.value}))}>{['ኢሱዙ','ሚኒ','ሌላ'].map(v=><option key={v}>{v}</option>)}</select></div>
+        <div className="field"><label className="lbl">ወጪ (ብር)</label><input className="inp" type="number" placeholder="ብር" value={form.cost} onChange={e=>setForm(f=>({...f,cost:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ዕቃዎች</label><input className="inp" placeholder="ምን ዕቃ?" value={form.items} onChange={e=>setForm(f=>({...f,items:e.target.value}))}/></div>
+        <button className="btn btn-gold" onClick={add}>+ ትራንስፖርት ምዝገባ</button>
+      </div>
+      {data.transport.slice(-6).reverse().map(t=>(
+        <div key={t.id} className="list-item">
+          <div className="list-item-img">🚚</div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{t.from} → {t.to}</div><div style={{fontSize:11,color:'var(--muted)'}}>{t.vehicle} · {t.items} · {t.date}</div></div>
+          <div style={{fontWeight:700,color:'var(--red)',fontSize:13}}>{fmt(t.cost)}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PreordersTab({data,save,showToast}){
+  const[form,setForm]=useState({customerName:'',phone:'',item:'',qty:'',deposit:'',expectedDate:''});
+  const add=()=>{
+    if(!form.customerName||!form.item){showToast('ሙሉ!','err');return;}
+    save('preorders',[...data.preorders,{id:Date.now(),...form,qty:parseInt(form.qty||1),deposit:parseFloat(form.deposit||0),fulfilled:false,date:today()}]);
+    setForm({customerName:'',phone:'',item:'',qty:'',deposit:'',expectedDate:''});
+    showToast('ቅድሚያ ትዕዛዝ ተመዝግቧል ✓');
+  };
+  return(
+    <div>
+      <div className="card" style={{marginBottom:12,border:'1px solid #3b82f633'}}>
+        <div style={{fontSize:13,fontWeight:700,color:'#93c5fd',marginBottom:10}}>🔖 ቅድሚያ ትዕዛዝ</div>
+        <div className="field"><label className="lbl">ደንበኛ ስም</label><input className="inp" value={form.customerName} onChange={e=>setForm(f=>({...f,customerName:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ስልክ</label><input className="inp" type="tel" value={form.phone} onChange={e=>setForm(f=>({...f,phone:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">የፈለጉት ዕቃ</label><input className="inp" value={form.item} onChange={e=>setForm(f=>({...f,item:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ብዛት</label><input className="inp" type="number" value={form.qty} onChange={e=>setForm(f=>({...f,qty:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ቅድሚያ ክፍያ (ብር)</label><input className="inp" type="number" value={form.deposit} onChange={e=>setForm(f=>({...f,deposit:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">እቃ የሚደርስበት ቀን</label><input className="inp" type="date" value={form.expectedDate} onChange={e=>setForm(f=>({...f,expectedDate:e.target.value}))}/></div>
+        <button className="btn btn-gold" onClick={add}>+ ምዝገባ</button>
+      </div>
+      {data.preorders.map(p=>(
+        <div key={p.id} className="list-item">
+          <div className="list-item-img">🔖</div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:600,fontSize:13}}>{p.customerName} — {p.item} x{p.qty}</div>
+            <div style={{fontSize:11,color:'var(--muted)'}}>{p.phone} · ቅድሚያ: {fmt(p.deposit)}</div>
+            {p.expectedDate&&<div style={{fontSize:11,color:'var(--blue)'}}>ይደርሳል: {p.expectedDate}</div>}
+          </div>
+          <button onClick={()=>{const u=data.preorders.map(x=>x.id===p.id?{...x,fulfilled:!x.fulfilled}:x);save('preorders',u);}} style={{background:p.fulfilled?'#14532d':'var(--card2)',border:'none',borderRadius:8,padding:'6px 10px',color:p.fulfilled?'#86efac':'var(--muted)',cursor:'pointer',fontSize:12,fontFamily:'inherit'}}>{p.fulfilled?'✓ ተፈፀመ':'ምዝገባ'}</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ReturnsTab({data,save,showToast}){
+  const[form,setForm]=useState({customerName:'',item:'',qty:'',reason:'ተበላሽቷል',refundAmt:''});
+  const add=()=>{
+    if(!form.customerName||!form.item){showToast('ሙሉ!','err');return;}
+    save('returns',[...data.returns,{id:Date.now(),...form,qty:parseInt(form.qty||1),refundAmt:parseFloat(form.refundAmt||0),date:today()}]);
+    setForm({customerName:'',item:'',qty:'',reason:'ተበላሽቷል',refundAmt:''});
+    showToast('ተመላሽ ተመዝግቧል');
+  };
+  return(
+    <div>
+      <div className="card" style={{marginBottom:12}}>
+        <div style={{fontSize:13,fontWeight:700,color:'var(--gold2)',marginBottom:10}}>↩️ ተመላሽ ዕቃ</div>
+        <div className="field"><label className="lbl">ደንበኛ ስም</label><input className="inp" value={form.customerName} onChange={e=>setForm(f=>({...f,customerName:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ዕቃ</label><input className="inp" value={form.item} onChange={e=>setForm(f=>({...f,item:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ብዛት</label><input className="inp" type="number" value={form.qty} onChange={e=>setForm(f=>({...f,qty:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ምክንያት</label><select className="inp" value={form.reason} onChange={e=>setForm(f=>({...f,reason:e.target.value}))}>{['ተበላሽቷል','አልፈለኩትም','ሌላ'].map(r=><option key={r}>{r}</option>)}</select></div>
+        <div className="field"><label className="lbl">ተመላሽ ብር</label><input className="inp" type="number" value={form.refundAmt} onChange={e=>setForm(f=>({...f,refundAmt:e.target.value}))}/></div>
+        <button className="btn btn-gold" onClick={add}>+ ምዝገባ</button>
+      </div>
+      {data.returns.map(r=>(
+        <div key={r.id} className="list-item">
+          <div className="list-item-img">↩️</div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{r.customerName} — {r.item}</div><div style={{fontSize:11,color:'var(--muted)'}}>{r.reason} · {r.date}</div></div>
+          <div style={{fontWeight:700,color:'var(--red)',fontSize:12}}>{fmt(r.refundAmt)}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function CustomersTab({data,save,showToast}){
+  const[form,setForm]=useState({name:'',phone:'',address:''});
+  const add=()=>{
+    if(!form.name){showToast('ስም ፃፍ!','err');return;}
+    save('customers',[...data.customers,{id:Date.now(),...form,date:today()}]);
+    setForm({name:'',phone:'',address:''});
+    showToast('ደንበኛ ተመዝግቧል ✓');
+  };
+  return(
+    <div>
+      <div className="card" style={{marginBottom:12}}>
+        <div className="field"><label className="lbl">ስም</label><input className="inp" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ስልክ</label><input className="inp" type="tel" value={form.phone} onChange={e=>setForm(f=>({...f,phone:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">አድራሻ</label><input className="inp" value={form.address} onChange={e=>setForm(f=>({...f,address:e.target.value}))}/></div>
+        <button className="btn btn-gold" onClick={add}>+ ደንበኛ ምዝገባ</button>
+      </div>
+      {data.customers.map(c=>(
+        <div key={c.id} className="list-item">
+          <div className="list-item-img">👤</div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:11,color:'var(--muted)'}}>{c.phone} · {c.address}</div></div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ReportTab({data}){
+  const totalRevenue=data.sales.filter(s=>s.method!=='ዱቤ').reduce((s,x)=>s+x.total,0);
+  const totalCost=data.sales.reduce((s,x)=>s+(x.cost||0)*x.qty,0);
+  const totalExpenses=data.expenses.reduce((s,x)=>s+x.amount,0);
+  const totalTransport=data.transport.reduce((s,x)=>s+x.cost,0);
+  const totalDamages=data.damages.reduce((s,x)=>s+x.qty*(x.cost||0),0);
+  const totalProfit=totalRevenue-totalCost-totalExpenses-totalTransport-totalDamages;
+
+  const byWorker={};
+  data.sales.forEach(s=>{
+    if(!byWorker[s.worker])byWorker[s.worker]={count:0,total:0};
+    byWorker[s.worker].count++;byWorker[s.worker].total+=s.total;
+  });
+
+  const topProducts=Object.values(data.sales.reduce((acc,s)=>{
+    if(!acc[s.product])acc[s.product]={name:s.product,qty:0,total:0};
+    acc[s.product].qty+=s.qty;acc[s.product].total+=s.total;
+    return acc;
+  },{})).sort((a,b)=>b.total-a.total);
+
+  return(
+    <div>
+      <div className="card" style={{marginBottom:10}}>
+        <div className="card-title">💰 ጠቅላላ ሂሳብ</div>
+        {[
+          ['ጠቅላላ ሽያጭ',fmt(totalRevenue),'var(--gold2)'],
+          ['የዕቃ ዋጋ',fmt(totalCost),'var(--red)'],
+          ['ወጪዎች',fmt(totalExpenses),'var(--red)'],
+          ['ትራንስፖርት',fmt(totalTransport),'var(--red)'],
+          ['ሰበራ ኪሳራ',fmt(totalDamages),'var(--red)'],
+          ['ተጣራ ትርፍ',fmt(Math.max(0,totalProfit)),'var(--green)'],
+        ].map(([l,v,c],i)=>(
+          <div key={i} style={{display:'flex',justifyContent:'space-between',padding:'9px 0',borderBottom:'1px solid var(--border)'}}>
+            <span style={{fontSize:13,color:'var(--muted)'}}>{l}</span>
+            <span style={{fontSize:13,fontWeight:800,color:c}}>{v}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="card" style={{marginBottom:10}}>
+        <div className="card-title">🏆 ቀዳሚ ሸቁጦች</div>
+        {topProducts.slice(0,5).map((p,i)=>(
+          <div key={p.name} style={{display:'flex',alignItems:'center',gap:10,padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
+            <div style={{width:24,height:24,borderRadius:8,background:i===0?'var(--gold)':'var(--card2)',color:i===0?'#000':'var(--muted)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:800,fontSize:11}}>{i+1}</div>
+            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{p.name}</div><div style={{fontSize:11,color:'var(--muted)'}}>{p.qty} ፍሬ</div></div>
+            <div style={{fontWeight:700,color:'var(--gold2)',fontSize:13}}>{fmt(p.total)}</div>
+          </div>
+        ))}
+        {topProducts.length===0&&<div style={{color:'var(--muted)',fontSize:13,textAlign:'center',padding:20}}>ሽያጭ የለም</div>}
+      </div>
+
+      <div className="card">
+        <div className="card-title">🧑‍💼 በሰራተኛ</div>
+        {Object.entries(byWorker).map(([name,v])=>(
+          <div key={name} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
+            <div><div style={{fontSize:13,fontWeight:600}}>{name}</div><div style={{fontSize:11,color:'var(--muted)'}}>{v.count} ሽያጭ</div></div>
+            <div style={{fontWeight:700,color:'var(--gold2)',fontSize:13,alignSelf:'center'}}>{fmt(v.total)}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function WorkersTab({data,save,showToast}){
+  const[form,setForm]=useState({name:'',phone:''});
+  const add=()=>{
+    if(!form.name){showToast('ስም ፃፍ!','err');return;}
+    save('workers',[...data.workers,{id:Date.now(),...form,role:'worker'}]);
+    setForm({name:'',phone:''});
+    showToast('ሰራተኛ ተመዝግቧል ✓');
+  };
+  return(
+    <div>
+      <div className="card" style={{marginBottom:12}}>
+        <div className="field"><label className="lbl">ስም</label><input className="inp" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}/></div>
+        <div className="field"><label className="lbl">ስልክ</label><input className="inp" type="tel" value={form.phone} onChange={e=>setForm(f=>({...f,phone:e.target.value}))}/></div>
+        <button className="btn btn-gold" onClick={add}>+ ሰራተኛ ምዝገባ</button>
+      </div>
+      {data.workers.map(w=>(
+        <div key={w.id} className="list-item">
+          <div className="list-item-img">🧑‍💼</div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{w.name}</div><div style={{fontSize:11,color:'var(--muted)'}}>{w.phone}</div></div>
+          <button onClick={()=>{save('workers',data.workers.filter(x=>x.id!==w.id));showToast('ተሰርዟል');}} style={{background:'#3a0a0a',border:'none',borderRadius:8,width:30,height:30,cursor:'pointer',color:'var(--red)'}}>🗑</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ===== RENDER =====
+const root=ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
 </body>
 </html>
