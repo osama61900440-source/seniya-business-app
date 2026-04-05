@@ -10,7 +10,16 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@300;400;600;700;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-:root{
+:root{/* ለስልክ ስክሪን የሚሆን ማስተካከያ */
+@media screen and (max-width: 600px) {
+  :root {
+    font-size: 18px; /* ሁሉንም ጽሑፍ በትልቁ ያደርገዋል */
+  }
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+}
+
   --bg:#08080f;--card:#111118;--card2:#181825;
   --gold:#d4a843;--gold2:#f0c84a;--gold3:#a07820;
   --green:#22c55e;--red:#ef4444;--blue:#3b82f6;
@@ -629,9 +638,8 @@ function Inventory({data,save,showToast,role}){
           ))}
           <div className="field">
             <label className="lbl">ዓይነት</label>
-            <select className="inp" value={form.category} onChange={e=>setForm(f=>({...f,category:e.target.value}))}>
-              {['ሸክላ','ሰፌድ','ሌላ'].map(c=><option key={c}>{c}</option>)}
-            </select>
+            <input className="inp" type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} placeholder="የዕቃ ስም እዚህ ይጻፉ" />
+
           </div>
           <button className="btn btn-gold" onClick={addProduct}>ምዝገባ ✓</button>
         </div>
