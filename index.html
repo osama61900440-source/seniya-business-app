@@ -143,8 +143,8 @@ const DB={
     if(!this.get('transport'))this.set('transport',[]);
     if(!this.get('returns'))this.set('returns',[]);
     if(!this.get('workers'))this.set('workers',[
-      {id:1,name:'አለሙ ተሰማ',role:'worker'},
-      {id:2,name:'ሃና ምትኩ',role:'worker'},
+      {id:1,name:'',role:'worker'},
+      {id:2,name:'',role:'worker'},
     ]);
   }
 };
@@ -311,7 +311,7 @@ function Dashboard({data,save,showToast}){
   const todayProfit=data.sales.filter(s=>s.date===today()).reduce((s,x)=>s+(x.total-(x.cost||0)*x.qty),0)-totalExpenses;
 
   // Weekly chart
-  const days=['ሰ','ሰ','ሶ','ሐ','አ','ዓ','ቅ'];
+  const days=['ሰ','ማ','እሮብ','ሐ','አ','ቅ','እ'];
   const weekSales=Array(7).fill(0).map((_,i)=>{
     const d=new Date();d.setDate(d.getDate()-6+i);
     const dk=d.toISOString().slice(0,10);
@@ -466,7 +466,7 @@ function SalePage({data,save,showToast,role}){
           <div style={{fontSize:20,fontWeight:800,color:'var(--gold2)',marginBottom:4}}>ደረሰኝ</div>
           <div style={{fontSize:11,color:'var(--muted)',marginBottom:16}}>ሴኒያ ቢዝነስ · {receipt.date} {receipt.time}</div>
           <div style={{textAlign:'left'}}>
-            {[['ዕቃ',receipt.product],['ብዛት',receipt.qty+' ፍሬ'],['ቅናሽ',receipt.discountAmt>0?fmt(receipt.discountAmt):'—'],['ጠቅላላ',fmt(receipt.total)],['ክፍያ',receipt.method],['ሰራተኛ',receipt.worker]].map(([l,v],i)=>(
+            {[['እቃ','የዳቦ መሶብ','የቁም መሶብ','ብጀበና,',receipt.product],['ብዛት',receipt.qty+' ፍሬ'],['ቅናሽ',receipt.discountAmt>0?fmt(receipt.discountAmt):'—'],['ጠቅላላ',fmt(receipt.total)],['ክፍያ',receipt.method],['ሰራተኛ',receipt.worker]].map(([l,v],i)=>(
               <div key={i} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
                 <span style={{color:'var(--muted)',fontSize:13}}>{l}</span>
                 <span style={{fontWeight:700,fontSize:13}}>{v}</span>
