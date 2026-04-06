@@ -186,14 +186,18 @@ function RoleSelect({onSelect}){
         <div style={{fontSize:22,fontWeight:800,color:'var(--gold2)'}}>ሴኒያ ቢዝነስ</div>
         <div style={{fontSize:12,color:'var(--muted)',marginTop:4}}>እርስዎ ማን ነዎት?</div>
       </div>
-      <div className="role-card" onClick={() => {
+    <div className="role-card" onClick={() => {  // እዚህ ጋር { ምልክቷ መኖሯን አረጋግጥ
   const pin = prompt("የባለቤት ሚስጥር ቁጥር ያስገቡ:");
-  if (pin === "2026") { // "2026" የሚለውን በምትፈልገው ቁጥር መቀየር ትችላለህ
+  if (pin === "2026") { 
     onSelect('owner');
   } else {
     alert("የተሳሳተ ቁጥር ነው!");
   }
-}}
+}}> {/* እዚህ ጋር ደግሞ }} መኖራቸውን አረጋግጥ */}
+  <div className="role-card-icon">👑</div>
+  <div className="role-card-title">ባለቤት / አስተዳዳሪ</div>
+  <div className="role-card-desc">ሁሉንም ሪፖርቶች፣ ትርፍና ሙሉ ስርዓቱን ያያሉ።</div>
+</div>
 
         <div className="role-card-icon">👑</div>
         <div className="role-card-title">ባለቤት / አስተዳዳሪ</div>
