@@ -10,21 +10,14 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@300;400;600;700;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-:root{/* ለስልክ ስክሪን የሚሆን ማስተካከያ */
-@media screen and (max-width: 600px) {
-  :root {
-    font-size: 18px; /* ሁሉንም ጽሑፍ በትልቁ ያደርገዋል */
-  }
-  body {
-    -webkit-text-size-adjust: 100%;
-  }
-}
-
+:root{
   --bg:#08080f;--card:#111118;--card2:#181825;
   --gold:#d4a843;--gold2:#f0c84a;--gold3:#a07820;
   --green:#22c55e;--red:#ef4444;--blue:#3b82f6;
   --text:#f5f0e8;--muted:#6b6580;--border:#252535;
+  --font-size:14px;
 }
+html{font-size:var(--font-size);}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans Ethiopic',sans-serif;min-height:100vh;overflow-x:hidden;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#111;}::-webkit-scrollbar-thumb{background:var(--gold3);border-radius:2px;}
 .splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.8s;}
@@ -54,47 +47,39 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans Ethiopic',san
 .nav-icon{font-size:19px;}
 .nav-label{font-size:9px;font-weight:600;}
 .nav-dot{width:4px;height:4px;border-radius:2px;background:var(--gold);}
-/* Cards */
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;}
 .card+.card{margin-top:10px;}
 .card-title{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;}
-/* Stats */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;}
 .stat-icon{font-size:22px;margin-bottom:6px;}
 .stat-val{font-size:17px;font-weight:800;}
 .stat-label{font-size:10px;color:var(--muted);margin-top:2px;}
-/* Inputs */
 .inp{width:100%;background:#0a0a12;border:1px solid var(--border);border-radius:10px;padding:11px 13px;color:var(--text);font-family:inherit;font-size:13px;outline:none;transition:border 0.2s;}
 .inp:focus{border-color:var(--gold);}
 .inp::placeholder{color:var(--muted);}
 .lbl{font-size:11px;color:var(--muted);margin-bottom:5px;display:block;}
 .field{margin-bottom:12px;}
-/* Buttons */
 .btn{width:100%;border:none;border-radius:12px;padding:13px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;transition:opacity 0.2s;}
 .btn:active{opacity:0.8;}
 .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;}
 .btn-green{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;}
 .btn-red{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;}
 .btn-sm{padding:8px 14px;font-size:12px;width:auto;border-radius:8px;}
-/* Badges */
 .badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;}
 .badge-red{background:#7f1d1d;color:#fca5a5;}
 .badge-green{background:#14532d;color:#86efac;}
 .badge-gold{background:#451a03;color:var(--gold2);}
 .badge-blue{background:#1e3a5f;color:#93c5fd;}
-/* List items */
 .list-item{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
 .list-item-img{width:48px;height:48px;border-radius:10px;background:#0a0a12;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 .list-item-img img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
 .progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin:8px 0;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#16a34a);border-radius:3px;transition:width 0.5s;}
-/* Alert */
 .alert{border-radius:13px;padding:13px 14px;margin-bottom:10px;}
 .alert-red{background:#3a0a0a;border:1px solid #ef444433;}
 .alert-gold{background:#2a1500;border:1px solid var(--gold3)44;}
 .alert-green{background:#0a2a14;border:1px solid #22c55e33;}
-/* Section heading */
 .sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .sec-title{font-size:12px;color:var(--muted);font-weight:700;}
 /* Role screen */
@@ -105,6 +90,20 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans Ethiopic',san
 .role-card-icon{font-size:40px;margin-bottom:12px;}
 .role-card-title{font-size:18px;font-weight:800;color:var(--gold2);margin-bottom:6px;}
 .role-card-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+/* PIN pad (ቢን ስክሪን) */
+.pin-screen{position:fixed;inset:0;background:#000c;z-index:600;display:flex;align-items:center;justify-content:center;padding:24px;}
+.pin-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:28px 22px;width:100%;max-width:320px;text-align:center;}
+.pin-title{font-size:16px;font-weight:800;color:var(--gold2);margin-bottom:6px;}
+.pin-sub{font-size:12px;color:var(--muted);margin-bottom:20px;}
+.pin-dots{display:flex;justify-content:center;gap:12px;margin-bottom:20px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);background:transparent;transition:background 0.2s,border-color 0.2s;}
+.pin-dot.filled{background:var(--gold);border-color:var(--gold);}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.pin-key{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px;font-size:20px;font-weight:800;color:var(--text);cursor:pointer;transition:background 0.15s;}
+.pin-key:active{background:var(--gold);color:#000;}
+.pin-key.zero{grid-column:2;}
+.pin-key.del{background:#1a0808;color:var(--red);font-size:16px;}
+.pin-err{color:var(--red);font-size:13px;font-weight:700;margin-top:10px;min-height:20px;}
 /* Toast */
 .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 22px;border-radius:22px;font-weight:700;z-index:9999;font-size:13px;box-shadow:0 4px 20px #0008;animation:toastIn 0.3s ease;}
 .toast.err{background:var(--red);}
@@ -117,6 +116,15 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans Ethiopic',san
 .gps-dot{width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;box-shadow:0 0 0 3px #22c55e33;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 3px #22c55e33}50%{box-shadow:0 0 0 6px #22c55e11}}
 select.inp{-webkit-appearance:none;}
+/* Settings panel */
+.settings-panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;}
+.settings-title{font-size:13px;font-weight:800;color:var(--gold2);margin-bottom:14px;}
+.slider-wrap{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.slider-wrap input[type=range]{flex:1;accent-color:var(--gold);}
+.color-swatches{display:flex;gap:10px;flex-wrap:wrap;}
+.swatch{width:36px;height:36px;border-radius:10px;cursor:pointer;border:3px solid transparent;transition:border-color 0.2s,transform 0.15s;}
+.swatch:active{transform:scale(0.9);}
+.swatch.active{border-color:#fff;}
 </style>
 </head>
 <body>
@@ -143,9 +151,10 @@ const DB={
     if(!this.get('transport'))this.set('transport',[]);
     if(!this.get('returns'))this.set('returns',[]);
     if(!this.get('workers'))this.set('workers',[
-      {id:1,name:'',role:'worker'},
-      {id:2,name:'',role:'worker'},
+      {id:1,name:'ሰራተኛ 1',role:'worker'},
+      {id:2,name:'ሰራተኛ 2',role:'worker'},
     ]);
+    if(!this.get('appSettings'))this.set('appSettings',{fontSize:14,theme:'gold'});
   }
 };
 DB.init();
@@ -154,8 +163,40 @@ const fmt=(n)=>Number(n||0).toLocaleString('am-ET')+' ብር';
 const today=()=>new Date().toISOString().slice(0,10);
 const nowTime=()=>new Date().toLocaleTimeString('am',{hour:'2-digit',minute:'2-digit'});
 
+// ===== THEMES (4 ዓይነት ቀለሞች) =====
+const THEMES={
+  gold:{
+    '--gold':'#d4a843','--gold2':'#f0c84a','--gold3':'#a07820',
+    '--bg':'#08080f','--card':'#111118','--card2':'#181825',
+    '--border':'#252535','--text':'#f5f0e8','--muted':'#6b6580',
+  },
+  blue:{
+    '--gold':'#60a5fa','--gold2':'#93c5fd','--gold3':'#2563eb',
+    '--bg':'#050c1a','--card':'#0c1829','--card2':'#152236',
+    '--border':'#1e3a5f','--text':'#e8f0f5','--muted':'#4a6080',
+  },
+  green:{
+    '--gold':'#4ade80','--gold2':'#86efac','--gold3':'#16a34a',
+    '--bg':'#050f08','--card':'#0c1a0e','--card2':'#122614',
+    '--border':'#1a3520','--text':'#e8f5ec','--muted':'#4a6050',
+  },
+  purple:{
+    '--gold':'#c084fc','--gold2':'#e879f9','--gold3':'#7c3aed',
+    '--bg':'#08050f','--card':'#110c1a','--card2':'#1a1225',
+    '--border':'#2d1a45','--text':'#f2eef8','--muted':'#6a5585',
+  },
+};
+
+const THEME_LABELS={gold:'🌟 ወርቃማ',blue:'💙 ሰማያዊ',green:'💚 አረንጓዴ',purple:'💜 ወይን'};
+
+function applyTheme(themeName,fontSize){
+  const t=THEMES[themeName]||THEMES.gold;
+  const root=document.documentElement;
+  Object.entries(t).forEach(([k,v])=>root.style.setProperty(k,v));
+  root.style.setProperty('--font-size',fontSize+'px');
+}
+
 // ===== TOAST =====
-let _toast=null;
 function Toast({msg,type}){return msg?<div className={`toast${type==='err'?' err':''}`}>{msg}</div>:null;}
 
 // ===== SPLASH =====
@@ -177,28 +218,63 @@ function Splash({onDone}){
   );
 }
 
+// ===== PIN PAD (ለባለቤት ቢን ስክሪን) =====
+const OWNER_PIN='2026';
+
+function PinPad({onSuccess,onCancel}){
+  const[pin,setPin]=useState('');
+  const[err,setErr]=useState('');
+
+  const press=(d)=>{
+    if(pin.length>=4)return;
+    const next=pin+d;
+    setPin(next);
+    setErr('');
+    if(next.length===4){
+      setTimeout(()=>{
+        if(next===OWNER_PIN){onSuccess();}
+        else{setErr('❌ ስህተት ቁጥር! እንደገና ሞክር');setPin('');}
+      },200);
+    }
+  };
+
+  const del=()=>{setPin(p=>p.slice(0,-1));setErr('');};
+
+  return(
+    <div className="pin-screen">
+      <div className="pin-box">
+        <div className="pin-title">👑 ባለቤት መግቢያ</div>
+        <div className="pin-sub">4-ዲጂት ሚስጥር ቁጥር ያስገቡ</div>
+        <div className="pin-dots">
+          {[0,1,2,3].map(i=><div key={i} className={`pin-dot${i<pin.length?' filled':''}`}/>)}
+        </div>
+        <div className="pin-grid">
+          {[1,2,3,4,5,6,7,8,9].map(n=>(
+            <div key={n} className="pin-key" onClick={()=>press(String(n))}>{n}</div>
+          ))}
+          <div className="pin-key del" onClick={onCancel}>✕</div>
+          <div className="pin-key zero" onClick={()=>press('0')}>0</div>
+          <div className="pin-key del" onClick={del}>⌫</div>
+        </div>
+        <div className="pin-err">{err}</div>
+      </div>
+    </div>
+  );
+}
+
 // ===== ROLE SELECT =====
 function RoleSelect({onSelect}){
+  const[showPin,setShowPin]=useState(false);
+
   return(
     <div className="role-screen">
+      {showPin&&<PinPad onSuccess={()=>onSelect('owner')} onCancel={()=>setShowPin(false)}/>}
       <div style={{textAlign:'center',marginBottom:32}}>
         <div style={{fontSize:40,marginBottom:8}}>🏺</div>
         <div style={{fontSize:22,fontWeight:800,color:'var(--gold2)'}}>ሴኒያ ቢዝነስ</div>
         <div style={{fontSize:12,color:'var(--muted)',marginTop:4}}>እርስዎ ማን ነዎት?</div>
       </div>
-    <div className="role-card" onClick={() => {  // እዚህ ጋር { ምልክቷ መኖሯን አረጋግጥ
-  const pin = prompt("የባለቤት ሚስጥር ቁጥር ያስገቡ:");
-  if (pin === "2026") { 
-    onSelect('owner');
-  } else {
-    alert("የተሳሳተ ቁጥር ነው!");
-  }
-}}> {/* እዚህ ጋር ደግሞ }} መኖራቸውን አረጋግጥ */}
-  <div className="role-card-icon">👑</div>
-  <div className="role-card-title">ባለቤት / አስተዳዳሪ</div>
-  <div className="role-card-desc">ሁሉንም ሪፖርቶች፣ ትርፍና ሙሉ ስርዓቱን ያያሉ።</div>
-</div>
-
+      <div className="role-card" onClick={()=>setShowPin(true)}>
         <div className="role-card-icon">👑</div>
         <div className="role-card-title">ባለቤት / አስተዳዳሪ</div>
         <div className="role-card-desc">ሁሉንም ሪፖርቶች፣ ትርፍ፣ ሰራተኞችን እና ሙሉ ስርዓቱን ያያሉ</div>
@@ -206,7 +282,61 @@ function RoleSelect({onSelect}){
       <div className="role-card" onClick={()=>onSelect('worker')}>
         <div className="role-card-icon">🧑‍💼</div>
         <div className="role-card-title">ሰራተኛ</div>
-        <div className="role-card-desc">ሽያጭ ብቻ ይመዘግባሉ — ሌሎች ሂሳቦች አይታዩዎትም</div>
+        <div className="role-card-desc">ሽያጭ ይመዘግባሉ እና አዲስ ዕቃ ማስገባት ይችላሉ</div>
+      </div>
+    </div>
+  );
+}
+
+// ===== SETTINGS (ቅንጅቶች ፓነል) =====
+function SettingsPanel({settings,onSettingsChange}){
+  const handleFont=(e)=>{
+    const fs=Number(e.target.value);
+    onSettingsChange({...settings,fontSize:fs});
+    applyTheme(settings.theme,fs);
+  };
+  const handleTheme=(th)=>{
+    onSettingsChange({...settings,theme:th});
+    applyTheme(th,settings.fontSize);
+  };
+
+  return(
+    <div className="settings-panel">
+      <div className="settings-title">⚙️ ቅንጅቶች</div>
+
+      <div className="field">
+        <label className="lbl">📝 የፊደል መጠን — {settings.fontSize}px</label>
+        <div className="slider-wrap">
+          <span style={{fontSize:11,color:'var(--muted)'}}>ትንሽ</span>
+          <input type="range" min="12" max="22" step="1" value={settings.fontSize} onChange={handleFont}/>
+          <span style={{fontSize:11,color:'var(--muted)'}}>ትልቅ</span>
+        </div>
+        <div style={{fontSize:settings.fontSize,color:'var(--gold2)',textAlign:'center',padding:'6px 0'}}>
+          ሴኒያ ቢዝነስ — ናሙና ፊደል
+        </div>
+      </div>
+
+      <div className="field">
+        <label className="lbl">🎨 ቀለም ምረጥ</label>
+        <div className="color-swatches">
+          {Object.entries(THEMES).map(([key,th])=>(
+            <div
+              key={key}
+              className={`swatch${settings.theme===key?' active':''}`}
+              style={{background:`linear-gradient(135deg,${th['--gold']},${th['--gold3']})`}}
+              onClick={()=>handleTheme(key)}
+              title={THEME_LABELS[key]}
+            />
+          ))}
+        </div>
+        <div style={{display:'flex',gap:8,marginTop:8,flexWrap:'wrap'}}>
+          {Object.entries(THEME_LABELS).map(([key,label])=>(
+            <button key={key} onClick={()=>handleTheme(key)}
+              style={{padding:'5px 12px',borderRadius:20,border:`1.5px solid ${settings.theme===key?'var(--gold)':'var(--border)'}`,background:settings.theme===key?'var(--card2)':'transparent',color:settings.theme===key?'var(--gold2)':'var(--muted)',fontFamily:'inherit',fontSize:11,cursor:'pointer',fontWeight:settings.theme===key?700:400}}>
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -214,11 +344,13 @@ function RoleSelect({onSelect}){
 
 // ===== MAIN APP =====
 function App(){
+  const savedSettings=DB.get('appSettings')||{fontSize:14,theme:'gold'};
   const[splash,setSplash]=useState(true);
   const[role,setRole]=useState(null);
   const[tab,setTab]=useState('dashboard');
   const[toast,setToast]=useState(null);
   const[online,setOnline]=useState(navigator.onLine);
+  const[settings,setSettings]=useState(savedSettings);
   const[data,setData]=useState({
     sales:DB.get('sales')||[],
     products:DB.get('products')||[],
@@ -231,6 +363,9 @@ function App(){
     returns:DB.get('returns')||[],
     workers:DB.get('workers')||[],
   });
+
+  // Apply saved settings on load
+  useEffect(()=>{applyTheme(savedSettings.theme,savedSettings.fontSize);},[]);
 
   useEffect(()=>{
     const on=()=>setOnline(true);
@@ -245,13 +380,18 @@ function App(){
     setData(d=>({...d,[key]:val}));
   };
 
+  const handleSettingsChange=(newS)=>{
+    setSettings(newS);
+    DB.set('appSettings',newS);
+  };
+
   const showToast=(msg,type='ok')=>{
     setToast({msg,type});
     setTimeout(()=>setToast(null),2800);
   };
 
   if(splash)return<Splash onDone={()=>setSplash(false)}/>;
-  if(!role)return<RoleSelect onSelect={setRole}/>;
+  if(!role)return<RoleSelect onSelect={(r)=>{setRole(r);setTab(r==='owner'?'dashboard':'sale');}}/>;
 
   const ownerTabs=[
     {id:'dashboard',icon:'📊',label:'ዳሽቦርድ'},
@@ -265,12 +405,11 @@ function App(){
     {id:'inventory',icon:'📦',label:'ዕቃ'},
   ];
   const tabs=role==='owner'?ownerTabs:workerTabs;
-  const activeTab=tabs.find(t=>t.id===tab)?tab:(tabs[0].id);
+  const activeTab=tabs.find(t=>t.id===tab)?tab:tabs[0].id;
 
   return(
     <div className="app">
       {toast&&<Toast msg={toast.msg} type={toast.type}/>}
-      {/* Header */}
       <div className="header">
         <div className="header-top">
           <div className="logo-box">🏺</div>
@@ -285,16 +424,14 @@ function App(){
         </div>
       </div>
 
-      {/* Content */}
       <div className="content">
-        {activeTab==='dashboard'&&role==='owner'&&<Dashboard data={data} save={save} showToast={showToast}/>}
+        {activeTab==='dashboard'&&role==='owner'&&<Dashboard data={data} save={save} showToast={showToast} settings={settings} onSettingsChange={handleSettingsChange}/>}
         {activeTab==='sale'&&<SalePage data={data} save={save} showToast={showToast} role={role}/>}
         {activeTab==='inventory'&&<Inventory data={data} save={save} showToast={showToast} role={role}/>}
         {activeTab==='debts'&&role==='owner'&&<Debts data={data} save={save} showToast={showToast}/>}
-        {activeTab==='more'&&role==='owner'&&<More data={data} save={save} showToast={showToast}/>}
+        {activeTab==='more'&&role==='owner'&&<More data={data} save={save} showToast={showToast} settings={settings} onSettingsChange={handleSettingsChange}/>}
       </div>
 
-      {/* Bottom Nav */}
       <div className="bottom-nav">
         {tabs.map(t=>(
           <button key={t.id} className={`nav-btn${activeTab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>
@@ -313,7 +450,7 @@ function App(){
 }
 
 // ===== DASHBOARD =====
-function Dashboard({data,save,showToast}){
+function Dashboard({data,save,showToast,settings,onSettingsChange}){
   const todaySales=data.sales.filter(s=>s.date===today()&&s.method!=='ዱቤ').reduce((s,x)=>s+x.total,0);
   const todayDebt=data.sales.filter(s=>s.date===today()&&s.method==='ዱቤ').reduce((s,x)=>s+x.total,0);
   const totalExpenses=data.expenses.filter(e=>e.date===today()).reduce((s,x)=>s+x.amount,0);
@@ -322,7 +459,6 @@ function Dashboard({data,save,showToast}){
   const lowStock=data.products.filter(p=>p.qty<=5);
   const todayProfit=data.sales.filter(s=>s.date===today()).reduce((s,x)=>s+(x.total-(x.cost||0)*x.qty),0)-totalExpenses;
 
-  // Weekly chart
   const days=['ሰ','ማ','እሮብ','ሐ','አ','ቅ','እ'];
   const weekSales=Array(7).fill(0).map((_,i)=>{
     const d=new Date();d.setDate(d.getDate()-6+i);
@@ -333,13 +469,14 @@ function Dashboard({data,save,showToast}){
 
   return(
     <div>
-      {/* Arabic greeting */}
       <div style={{textAlign:'center',padding:'8px 0 14px',borderBottom:'1px solid var(--border)',marginBottom:14}}>
         <div style={{fontSize:22,color:'var(--gold2)',direction:'rtl',letterSpacing:3}}>بِسْمِ اللَّه الرَّحْمَنِ الرَّحِيم</div>
         <div style={{fontSize:11,color:'var(--muted)',marginTop:4}}>ዛሬ · {new Date().toLocaleDateString('am')}</div>
       </div>
 
-      {/* Stats */}
+      {/* ቅንጅቶች ፓነል */}
+      <SettingsPanel settings={settings} onSettingsChange={onSettingsChange}/>
+
       <div className="stats-grid">
         {[
           {icon:'💵',val:fmt(todaySales),label:'ዛሬ ሽያጭ',color:'var(--green)'},
@@ -355,7 +492,6 @@ function Dashboard({data,save,showToast}){
         ))}
       </div>
 
-      {/* Weekly chart */}
       <div className="card" style={{marginBottom:10}}>
         <div className="card-title">📊 የሳምንቱ ሽያጭ</div>
         <div className="chart-bar-wrap">
@@ -368,7 +504,6 @@ function Dashboard({data,save,showToast}){
         </div>
       </div>
 
-      {/* Low stock alert */}
       {lowStock.length>0&&(
         <div className="alert alert-gold" style={{marginBottom:10}}>
           <div style={{fontSize:13,fontWeight:700,color:'var(--gold2)',marginBottom:6}}>⚠️ ዕቃ እያለቀ ነው ({lowStock.length})</div>
@@ -376,15 +511,13 @@ function Dashboard({data,save,showToast}){
         </div>
       )}
 
-      {/* Pending preorders */}
       {data.preorders.filter(p=>!p.fulfilled).length>0&&(
-        <div className="alert alert-blue" style={{marginBottom:10,background:'#0c1a2e',border:'1px solid #3b82f633'}}>
+        <div className="alert" style={{marginBottom:10,background:'#0c1a2e',border:'1px solid #3b82f633'}}>
           <div style={{fontSize:13,fontWeight:700,color:'#93c5fd',marginBottom:6}}>🔖 ቅድመ ትዕዛዞች ({data.preorders.filter(p=>!p.fulfilled).length})</div>
           {data.preorders.filter(p=>!p.fulfilled).slice(0,3).map(p=><div key={p.id} style={{fontSize:12,color:'#bfdbfe'}}>• {p.customerName} — {p.item} ({fmt(p.deposit)} ቀድሞ)</div>)}
         </div>
       )}
 
-      {/* Overdue debts */}
       {data.debts.filter(d=>(d.total-d.paid)>0&&d.dueDate<today()).length>0&&(
         <div className="alert alert-red" style={{marginBottom:10}}>
           <div style={{fontSize:13,fontWeight:700,color:'#fca5a5',marginBottom:6}}>⏰ ቀን ያለፈ ዱቤዎች</div>
@@ -392,7 +525,6 @@ function Dashboard({data,save,showToast}){
         </div>
       )}
 
-      {/* Summary row */}
       <div className="card">
         <div className="card-title">ዛሬ ማጠቃለያ</div>
         {[
@@ -464,7 +596,6 @@ function SalePage({data,save,showToast,role}){
       save('debts',[...data.debts,debt]);
     }
 
-    // Show receipt
     setReceipt({product:prod.name,qty,total,discountAmt,method,date:today(),time:nowTime(),worker});
     setSelProduct(null);setQty(1);setDiscount(0);setDebtName('');setDebtPhone('');setDueDate('');setVoiceMemo('');setGps(null);
     showToast('ሽያጭ ተመዝግቧል ✓  '+fmt(total));
@@ -478,7 +609,14 @@ function SalePage({data,save,showToast,role}){
           <div style={{fontSize:20,fontWeight:800,color:'var(--gold2)',marginBottom:4}}>ደረሰኝ</div>
           <div style={{fontSize:11,color:'var(--muted)',marginBottom:16}}>ሴኒያ ቢዝነስ · {receipt.date} {receipt.time}</div>
           <div style={{textAlign:'left'}}>
-            {[['እቃ','receipt.product],['ብዛት',receipt.qty+' ፍሬ'],['ቅናሽ',receipt.discountAmt>0?fmt(receipt.discountAmt):'—'],['ጠቅላላ',fmt(receipt.total)],['ክፍያ',receipt.method],['ሰራተኛ',receipt.worker]].map(([l,v],i)=>(
+            {[
+              ['እቃ',receipt.product],
+              ['ብዛት',receipt.qty+' ፍሬ'],
+              ['ቅናሽ',receipt.discountAmt>0?fmt(receipt.discountAmt):'—'],
+              ['ጠቅላላ',fmt(receipt.total)],
+              ['ክፍያ',receipt.method],
+              ['ሰራተኛ',receipt.worker],
+            ].map(([l,v],i)=>(
               <div key={i} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
                 <span style={{color:'var(--muted)',fontSize:13}}>{l}</span>
                 <span style={{fontWeight:700,fontSize:13}}>{v}</span>
@@ -495,9 +633,7 @@ function SalePage({data,save,showToast,role}){
   return(
     <div>
       <div className="sec-head"><div className="sec-title">💰 ሽያጭ ምዝገባ</div></div>
-
       <div className="card">
-        {/* Product */}
         <div className="field">
           <label className="lbl">ዕቃ ምረጥ</label>
           <select className="inp" value={selProduct||''} onChange={e=>setSelProduct(Number(e.target.value))}>
@@ -506,7 +642,6 @@ function SalePage({data,save,showToast,role}){
           </select>
         </div>
 
-        {/* Qty */}
         <div className="field">
           <label className="lbl">ብዛት</label>
           <div style={{display:'flex',alignItems:'center',gap:12}}>
@@ -516,13 +651,11 @@ function SalePage({data,save,showToast,role}){
           </div>
         </div>
 
-        {/* Discount */}
         <div className="field">
           <label className="lbl">ቅናሽ % (ካለ)</label>
           <input className="inp" type="number" placeholder="0" min="0" max="100" value={discount} onChange={e=>setDiscount(Number(e.target.value))}/>
         </div>
 
-        {/* Total */}
         <div style={{background:'#0a0a12',borderRadius:12,padding:'12px 16px',marginBottom:14,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
           <div>
             <div style={{fontSize:11,color:'var(--muted)'}}>ጠቅላላ</div>
@@ -531,7 +664,6 @@ function SalePage({data,save,showToast,role}){
           <div style={{fontSize:22,fontWeight:800,color:'var(--gold2)'}}>{fmt(total)}</div>
         </div>
 
-        {/* Payment */}
         <div className="field">
           <label className="lbl">የክፍያ ዓይነት</label>
           <div style={{display:'flex',gap:8}}>
@@ -543,7 +675,6 @@ function SalePage({data,save,showToast,role}){
           </div>
         </div>
 
-        {/* Debt fields */}
         {method==='ዱቤ'&&(
           <div style={{background:'#1a0808',border:'1px solid var(--red)33',borderRadius:12,padding:12,marginBottom:14}}>
             <div style={{fontSize:12,fontWeight:700,color:'var(--red)',marginBottom:10}}>📋 የዱቤ ዝርዝር</div>
@@ -553,7 +684,6 @@ function SalePage({data,save,showToast,role}){
           </div>
         )}
 
-        {/* Worker */}
         <div className="field">
           <label className="lbl">ሰራተኛ</label>
           <select className="inp" value={worker} onChange={e=>setWorker(e.target.value)}>
@@ -562,7 +692,6 @@ function SalePage({data,save,showToast,role}){
           </select>
         </div>
 
-        {/* GPS */}
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
           <button onClick={getGps} style={{background:'var(--card2)',border:'1px solid var(--border)',borderRadius:10,padding:'8px 14px',color:gps?'var(--green)':'var(--muted)',fontSize:12,cursor:'pointer',fontFamily:'inherit'}}>
             {gps?<><span className="gps-dot"/>አካባቢ ቀዷል</>:'📍 GPS ቅዳ'}
@@ -570,7 +699,6 @@ function SalePage({data,save,showToast,role}){
           {gps&&<span style={{fontSize:11,color:'var(--muted)'}}>{gps.lat}, {gps.lng}</span>}
         </div>
 
-        {/* Voice memo */}
         <div className="field">
           <label className="lbl">🎙 ማስታወሻ (ድምፅ / ፅሁፍ)</label>
           <input className="inp" placeholder="ዝርዝር ጻፍ ወይም ቀረጽ..." value={voiceMemo} onChange={e=>setVoiceMemo(e.target.value)}/>
@@ -579,7 +707,6 @@ function SalePage({data,save,showToast,role}){
         <button className="btn btn-gold" onClick={recordSale}>ሽያጭ ምዝገባ ✓</button>
       </div>
 
-      {/* Recent sales */}
       <div style={{marginTop:14}}>
         <div className="sec-head"><div className="sec-title">የቅርብ ሽያጮች</div></div>
         {data.sales.slice(-5).reverse().map(s=>(
@@ -599,7 +726,7 @@ function SalePage({data,save,showToast,role}){
   );
 }
 
-// ===== INVENTORY =====
+// ===== INVENTORY — ሰራተኛ አዲስ ዕቃ ማስገባት ይችላሉ =====
 function Inventory({data,save,showToast,role}){
   const[search,setSearch]=useState('');
   const[showAdd,setShowAdd]=useState(false);
@@ -633,14 +760,15 @@ function Inventory({data,save,showToast,role}){
     <div>
       <div className="sec-head">
         <div className="sec-title">📦 ዕቃዎች ({data.products.length})</div>
-        {role==='owner'&&<button className="btn btn-gold btn-sm" onClick={()=>setShowAdd(!showAdd)}>{showAdd?'✕ ዝጋ':'+ አዲስ'}</button>}
+        {/* ሰራተኛም ሆነ ባለቤት አዲስ ዕቃ ማስገባት ይችላሉ */}
+        <button className="btn btn-gold btn-sm" onClick={()=>setShowAdd(!showAdd)}>{showAdd?'✕ ዝጋ':'+ አዲስ'}</button>
       </div>
 
       <input className="inp" style={{marginBottom:12}} placeholder="ዕቃ ፈልግ..." value={search} onChange={e=>setSearch(e.target.value)}/>
 
       {showAdd&&(
         <div className="card" style={{marginBottom:12,border:'1px solid var(--gold3)44'}}>
-          <div style={{fontSize:13,fontWeight:700,color:'var(--gold2)',marginBottom:12}}>አዲስ ዕቃ</div>
+          <div style={{fontSize:13,fontWeight:700,color:'var(--gold2)',marginBottom:12}}>አዲስ ዕቃ ምዝገባ</div>
           <div onClick={()=>fileRef.current.click()} style={{height:90,background:'#0a0a12',border:'2px dashed var(--border)',borderRadius:12,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',marginBottom:12,overflow:'hidden'}}>
             {form.image?<img src={form.image} style={{width:'100%',height:'100%',objectFit:'cover'}}/>:<div style={{textAlign:'center',color:'var(--muted)'}}><div style={{fontSize:28}}>📷</div><div style={{fontSize:11}}>ፎቶ ጨምር</div></div>}
           </div>
@@ -649,9 +777,8 @@ function Inventory({data,save,showToast,role}){
             <div className="field" key={k}><label className="lbl">{l}</label><input className="inp" type={t} placeholder={ph} value={form[k]} onChange={e=>setForm(f=>({...f,[k]:e.target.value}))}/></div>
           ))}
           <div className="field">
-            <label className="lbl">ዓይነት</label>
-            <input className="inp" type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} placeholder="የዕቃ ስም እዚህ ይጻፉ" />
-
+            <label className="lbl">ዓይነት / ካቴጎሪ</label>
+            <input className="inp" type="text" value={form.category} onChange={(e)=>setForm(f=>({...f,category:e.target.value}))} placeholder="ሸክላ፣ ሰፌድ..." />
           </div>
           <button className="btn btn-gold" onClick={addProduct}>ምዝገባ ✓</button>
         </div>
@@ -740,7 +867,7 @@ function Debts({data,save,showToast}){
         <div style={{position:'fixed',inset:0,background:'#000a',zIndex:500,display:'flex',alignItems:'flex-end'}}>
           <div style={{background:'var(--card)',width:'100%',maxWidth:480,margin:'0 auto',borderRadius:'20px 20px 0 0',padding:24}}>
             <div style={{fontWeight:700,fontSize:16,marginBottom:4}}>💵 ክፍያ ተቀበል</div>
-            <div style={{fontSize:12,color:'var(--muted)',marginBottom:16}}>ቀሪ: {fmt(data.debts.find(d=>d.id===payId)?.total-data.debts.find(d=>d.id===payId)?.paid||0)}</div>
+            <div style={{fontSize:12,color:'var(--muted)',marginBottom:16}}>ቀሪ: {fmt((data.debts.find(d=>d.id===payId)?.total||0)-(data.debts.find(d=>d.id===payId)?.paid||0))}</div>
             <input className="inp" type="number" placeholder="ብር..." value={payAmt} onChange={e=>setPayAmt(e.target.value)} style={{fontSize:18,fontWeight:700,marginBottom:16}} autoFocus/>
             <div style={{display:'flex',gap:10}}>
               <button onClick={()=>setPayId(null)} style={{flex:1,padding:12,background:'var(--card2)',border:'1px solid var(--border)',borderRadius:12,color:'var(--muted)',cursor:'pointer',fontFamily:'inherit'}}>ይቅር</button>
@@ -754,7 +881,7 @@ function Debts({data,save,showToast}){
 }
 
 // ===== MORE (Owner only) =====
-function More({data,save,showToast}){
+function More({data,save,showToast,settings,onSettingsChange}){
   const[subTab,setSubTab]=useState('expenses');
 
   const subTabs=[
@@ -766,6 +893,7 @@ function More({data,save,showToast}){
     {id:'customers',label:'👥 ደንበኞች'},
     {id:'report',label:'📈 ሪፖርት'},
     {id:'workers',label:'🧑‍💼 ሰራተኞች'},
+    {id:'settings',label:'⚙️ ቅንጅቶች'},
   ];
 
   return(
@@ -777,7 +905,6 @@ function More({data,save,showToast}){
           </button>
         ))}
       </div>
-
       {subTab==='expenses'&&<ExpensesTab data={data} save={save} showToast={showToast}/>}
       {subTab==='damages'&&<DamagesTab data={data} save={save} showToast={showToast}/>}
       {subTab==='transport'&&<TransportTab data={data} save={save} showToast={showToast}/>}
@@ -786,6 +913,7 @@ function More({data,save,showToast}){
       {subTab==='customers'&&<CustomersTab data={data} save={save} showToast={showToast}/>}
       {subTab==='report'&&<ReportTab data={data}/>}
       {subTab==='workers'&&<WorkersTab data={data} save={save} showToast={showToast}/>}
+      {subTab==='settings'&&<SettingsPanel settings={settings} onSettingsChange={onSettingsChange}/>}
     </div>
   );
 }
