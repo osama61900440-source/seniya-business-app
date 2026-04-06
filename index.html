@@ -186,7 +186,15 @@ function RoleSelect({onSelect}){
         <div style={{fontSize:22,fontWeight:800,color:'var(--gold2)'}}>ሴኒያ ቢዝነስ</div>
         <div style={{fontSize:12,color:'var(--muted)',marginTop:4}}>እርስዎ ማን ነዎት?</div>
       </div>
-      <div className="role-card" onClick={()=>onSelect('owner')}>
+      <div className="role-card" onClick={() => {
+  const pin = prompt("የባለቤት ሚስጥር ቁጥር ያስገቡ:");
+  if (pin === "2026") { // "2026" የሚለውን በምትፈልገው ቁጥር መቀየር ትችላለህ
+    onSelect('owner');
+  } else {
+    alert("የተሳሳተ ቁጥር ነው!");
+  }
+}}
+
         <div className="role-card-icon">👑</div>
         <div className="role-card-title">ባለቤት / አስተዳዳሪ</div>
         <div className="role-card-desc">ሁሉንም ሪፖርቶች፣ ትርፍ፣ ሰራተኞችን እና ሙሉ ስርዓቱን ያያሉ</div>
@@ -466,7 +474,7 @@ function SalePage({data,save,showToast,role}){
           <div style={{fontSize:20,fontWeight:800,color:'var(--gold2)',marginBottom:4}}>ደረሰኝ</div>
           <div style={{fontSize:11,color:'var(--muted)',marginBottom:16}}>ሴኒያ ቢዝነስ · {receipt.date} {receipt.time}</div>
           <div style={{textAlign:'left'}}>
-            {[['እቃ','የዳቦ መሶብ','የቁም መሶብ','ብጀበና,',receipt.product],['ብዛት',receipt.qty+' ፍሬ'],['ቅናሽ',receipt.discountAmt>0?fmt(receipt.discountAmt):'—'],['ጠቅላላ',fmt(receipt.total)],['ክፍያ',receipt.method],['ሰራተኛ',receipt.worker]].map(([l,v],i)=>(
+            {[['እቃ','receipt.product],['ብዛት',receipt.qty+' ፍሬ'],['ቅናሽ',receipt.discountAmt>0?fmt(receipt.discountAmt):'—'],['ጠቅላላ',fmt(receipt.total)],['ክፍያ',receipt.method],['ሰራተኛ',receipt.worker]].map(([l,v],i)=>(
               <div key={i} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
                 <span style={{color:'var(--muted)',fontSize:13}}>{l}</span>
                 <span style={{fontWeight:700,fontSize:13}}>{v}</span>
